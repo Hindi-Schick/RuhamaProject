@@ -1,6 +1,7 @@
 // src/routes/PublisherRoutes.ts
 import express from 'express';
 import {PublisherRepository} from '../repositories/PublisherRepository';
+import { Publisher } from '../entities/Publisher';
 
 const router = express.Router();
 
@@ -16,4 +17,13 @@ router.post('/api/publisher', async (req, res) => {
   }
 });
 
+router.get('/api/publishers', async (req, res) => {
+  try {
+    const publishers = await Publisher.find(); 
+    return res.json(publishers);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 export { router as publisherRouter };

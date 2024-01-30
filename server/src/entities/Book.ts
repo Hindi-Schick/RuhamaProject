@@ -16,8 +16,8 @@ export class Book extends BaseEntity {
   @Column()
   publisher_id: number;
 
-  @Column()
-  published_date: number;
+  @Column({ type: "date", nullable: true })
+  published_date: Date;
 
   @ManyToOne(() => Publisher, { cascade: true })
   @JoinColumn({ name: "publisher_id" })
