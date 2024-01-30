@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+
+import BookForm from './components/BookForm';
+import BorrowingForm from './components/BorrowingForm';
+import CopyOfBookForm from './components/CopyOfBookForm';
+import PublisherForm from './components/PublisherForm';
+import ReaderForm from './components/ReaderForm';
+import BookList from './components/BookList';
+
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const queryClient = new QueryClient();
 
+// Define your theme
+const theme = createTheme();
+
+const App: React.FC = () => {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router>
+          <Container>
+            <Routes>
+              <Route path="/book" element={<BookForm />} />
+              <Route path="/borrowing" element={<BorrowingForm />} />
+              <Route path="/copyOfBook" element={<CopyOfBookForm />} />
+              <Route path="/publisher" element={<PublisherForm />} />
+              <Route path="/reader" element={<ReaderForm />} />
+              <Route path="/bookList" element={<BookList />} />
 
-export default App
+            </Routes>
+          </Container>
+        </Router>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+};
+
+export default App;
