@@ -11,6 +11,8 @@ import ReaderForm from './components/ReaderForm';
 import BookList from './components/BookList';
 
 import './App.css'
+import Navbar from './components/Navbar';
+import HomePage from './pages/HomePage';
 
 const queryClient = new QueryClient();
 
@@ -23,9 +25,11 @@ const App: React.FC = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router>
+          <Navbar/>
           <Container>
             <Routes>
-              <Route path="/book" element={<BookForm />} />
+              <Route path="/" element={<HomePage/>}/>
+              <Route path="/addBook" element={<BookForm />} />
               <Route path="/borrowing" element={<BorrowingForm />} />
               <Route path="/copyOfBook" element={<CopyOfBookForm />} />
               <Route path="/publisher" element={<PublisherForm />} />
