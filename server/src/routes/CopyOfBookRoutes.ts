@@ -17,10 +17,10 @@ router.post('/api/copyOfBook', async (req, res) => {
   }
 });
 
-router.get('/api/copyOfBooks', async (req, res) => {
+router.get('/api/copyBooks', async (req, res) => {
   try {
-    const copyOfBooks = await CopyOfBook.find(); 
-    return res.json(copyOfBooks);
+    const copyBooks = await CopyOfBook.find(); 
+    return res.json(copyBooks);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
