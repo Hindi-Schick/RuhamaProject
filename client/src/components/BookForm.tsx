@@ -9,6 +9,7 @@ interface BookFormData {
   author: string;
   publisher_id: number | '';
   published_date: string;
+  numCopies: number;
 }
 
 interface Publisher {
@@ -17,10 +18,16 @@ interface Publisher {
 }
 
 const BookForm: React.FC = () => {
-  const { register, handleSubmit, formState: { isSubmitting }, setValue } = useForm<BookFormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+    setValue,
+  } = useForm<BookFormData>({
     defaultValues: {
-      publisher_id: '' 
-    }
+      publisher_id: '',
+      numCopies: 1, // Default to 1 copy
+    },
   });
 
   const [publishers, setPublishers] = useState<Publisher[]>([]);
@@ -40,24 +47,46 @@ const BookForm: React.FC = () => {
     fetchPublishers();
   }, []);
 
-  // Correct type for the onChange handler
   const handleSelectChange = (
     event: SelectChangeEvent<{ value: unknown }>
   ) => {
-    // Explicitly cast to unknown first, then to number
     setValue('publisher_id', Number(event.target.value as unknown));
-  };  
+  };
 
   const onSubmit = async (data: BookFormData) => {
     try {
+      const { numCopies, ...bookData } = data;
+
       // Send data to your server API endpoint to create a new book
       const response = await axios.post(
         'http://localhost:8080/api/book',
-        data
+        bookData
       );
 
       // Log the server response (optional)
-      console.log('Server Response:', response.data);
+      console.log('Server Response (Book):', response.data);
+
+      // Now handle the creation of copies if numCopies is greater than 1
+      if (numCopies > 1) {
+        // You can use a loop to create copies, or handle it based on your server's API
+        for (let i = 2; i <= numCopies; i++) {
+          // Customize the copy data as needed
+          const copyData = {
+            title: bookData.title,
+            book_id: response.data.book_id, // Assuming the API returns the book_id
+            is_borrowed: false, // You may customize this based on your requirements
+          };
+
+          // Send data to your server API endpoint to create a new copy
+          const copyResponse = await axios.post(
+            'http://localhost:8080/api/copyOfBook',
+            copyData
+          );
+
+          // Log the server response (optional)
+          console.log(`Server Response (Copy ${i}):`, copyResponse.data);
+        }
+      }
     } catch (error) {
       // Handle errors (e.g., show an error message to the user)
       console.error('Error:', error);
@@ -103,6 +132,14 @@ const BookForm: React.FC = () => {
             type="date"
             label="Published Date"
             {...register('published_date', { required: true })}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Number of Copies"
+            type="number"
+            {...register('numCopies', { required: true, min: 1 })}
             fullWidth
           />
         </Grid>

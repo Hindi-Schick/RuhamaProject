@@ -12,7 +12,6 @@ interface Book {
   title: string;
   author: string;
   publisher_id: number;
-  publisher_name: string;
   published_date: Date;
 }
 
@@ -48,7 +47,7 @@ const BookList: React.FC = () => {
                   Published on {new Date(book.published_date).toLocaleDateString()}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  Publisher: {book.publisher_name}
+                  Publisher: {book.publisher_id}
                 </Typography>
               </CardContent>
             </Card>
@@ -64,7 +63,6 @@ const BookList: React.FC = () => {
       >
         Add Pablisher
       </Button>
-      {/* Button to navigate to the page for adding a new book */}
       <Button
         component={Link}
         to="/addBook"  

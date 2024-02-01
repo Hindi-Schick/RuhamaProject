@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
         <Button color="inherit" component={Link} to="/publisher" sx={{ display: { xs: 'none', md: 'block' } }}>
           Publisher
         </Button>
-        <Button color="inherit" component={Link} to="/reader" sx={{ display: { xs: 'none', md: 'block' } }}>
+        <Button color="inherit" component={Link} to="/readerList" sx={{ display: { xs: 'none', md: 'block' } }}>
           Reader
         </Button>
       </Toolbar>
