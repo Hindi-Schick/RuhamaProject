@@ -112,7 +112,7 @@ const BookForm: React.FC = () => {
         </Grid>
         <Grid item xs={12}>
           <FormControl fullWidth>
-            <InputLabel>Publisher ID</InputLabel>
+            <InputLabel>Publisher</InputLabel>
             {publishers.length > 0 && (
             <Select
               {...register('publisher_id', { required: true })}
