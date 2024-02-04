@@ -14,6 +14,16 @@ interface Reader {
   email: string;
   phone: number;
   address: string;
+  borrowedBooks: Borrowing[];
+}
+
+interface Borrowing {
+  borrowing_id: number;
+  copy_book_id: number;
+  reader_id: number;
+  book_id: number;
+  borrow_date: Date;
+  return_date: Date | null;
 }
 
 const ReaderList: React.FC = () => {
@@ -54,7 +64,9 @@ const ReaderList: React.FC = () => {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small">Learn More</Button>
+                <Button size="small" component={Link} to={`/reader/${reader.reader_id}/borrowed-books`}>
+                  View Borrowed Books
+                </Button>
               </CardActions>
             </Card>
           </Grid>

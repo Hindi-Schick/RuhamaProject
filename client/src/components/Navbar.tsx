@@ -33,9 +33,9 @@ const Navbar: React.FC = () => {
         <Button color="inherit" component={Link} to="/borrowing" sx={{ display: { xs: 'none', md: 'block' } }}>
           Borrowing
         </Button>
-        <Button color="inherit" component={Link} to="/publisher" sx={{ display: { xs: 'none', md: 'block' } }}>
+        {/* <Button color="inherit" component={Link} to="/publisher" sx={{ display: { xs: 'none', md: 'block' } }}>
           Publisher
-        </Button>
+        </Button> */}
         <Button color="inherit" component={Link} to="/readerList" sx={{ display: { xs: 'none', md: 'block' } }}>
           Reader
         </Button>
@@ -49,9 +49,9 @@ const Navbar: React.FC = () => {
           <ListItemButton component={Link} to="/borrowing" onClick={() => toggleDrawer(false)}>
             Borrowing
           </ListItemButton>
-          <ListItemButton component={Link} to="/publisher" onClick={() => toggleDrawer(false)}>
+          {/* <ListItemButton component={Link} to="/publisher" onClick={() => toggleDrawer(false)}>
             Publisher
-          </ListItemButton>
+          </ListItemButton> */}
           <ListItemButton component={Link} to="/reader" onClick={() => toggleDrawer(false)}>
             Reader
           </ListItemButton>

@@ -14,6 +14,7 @@ import ReaderList from './components/ReaderList';
 import QuickFilterOutsideOfGrid from './components/BorrowingList'; // Import the new component
 
 import './App.css';
+import BorrowedBooks from './components/BorrowedBooks';
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App: React.FC = () => {
               <Route path="/reader" element={<ReaderForm />} />
               <Route path="/bookList" element={<BookList />} />
               <Route path="/readerList" element={<ReaderList />} />
+              <Route path="/reader/:readerId/borrowed-books" element={<BorrowedBooks/>} />
             </Routes>
           </Container>
         </Router>
