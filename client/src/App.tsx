@@ -7,11 +7,11 @@ import BookForm from './components/BookForm';
 import BorrowingForm from './components/BorrowingForm';
 import PublisherForm from './components/PublisherForm';
 import ReaderForm from './components/ReaderForm';
-import BookList from './components/BookList';
+import BookList from './pages/BookList';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
-import ReaderList from './components/ReaderList';
-import QuickFilterOutsideOfGrid from './components/BorrowingList'; // Import the new component
+import ReaderList from './pages/ReaderList';
+import QuickFilterOutsideOfGrid from './pages/BorrowingList'; // Import the new component
 
 import './App.css';
 import BorrowedBooks from './components/BorrowedBooks';

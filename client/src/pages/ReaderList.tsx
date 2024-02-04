@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
 
-interface Reader {
+type Reader = {
   reader_id: number;
   name: string;
   email: string;
@@ -17,7 +17,7 @@ interface Reader {
   borrowedBooks: Borrowing[];
 }
 
-interface Borrowing {
+type Borrowing = {
   borrowing_id: number;
   copy_book_id: number;
   reader_id: number;

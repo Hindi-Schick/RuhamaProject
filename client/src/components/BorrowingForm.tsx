@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Button, Grid, Select, FormControl, SelectChangeEvent, InputLabel, MenuItem } from '@mui/material';
 import axios from 'axios';
 
-interface BorrowingFormData {
+type BorrowingFormData = {
   copy_book_id: number;
   reader_id: number;
   book_id: number;
@@ -11,14 +11,14 @@ interface BorrowingFormData {
   return_date: Date;
 }
 
-interface CopyOfBook {
+type CopyOfBook = {
   copy_book_id: number;
   title: string;
   book_id: number;
   is_borrowed: boolean;
 }
 
-interface Reader {
+type Reader = {
   reader_id: number;
   name: string;
 }

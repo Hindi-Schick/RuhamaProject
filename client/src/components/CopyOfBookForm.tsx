@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
 
-interface CopyOfBookFormData {
+type CopyOfBookFormData = {
   title: string;
   book_id: number;
   is_borrowed: boolean;

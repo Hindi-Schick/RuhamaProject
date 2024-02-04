@@ -4,7 +4,7 @@ import { TextField, Button, Grid, Select, MenuItem, InputLabel, FormControl, Sel
 import axios from 'axios';
 
 // Define the type for form data
-interface BookFormData {
+type BookFormData = {
   title: string;
   author: string;
   publisher_id: number | '';
@@ -12,7 +12,7 @@ interface BookFormData {
   numCopies: number;
 }
 
-interface Publisher {
+type Publisher = {
   publisher_id: number;
   name: string;
 }

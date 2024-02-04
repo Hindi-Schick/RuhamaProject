@@ -1,9 +1,10 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
 
-interface ReaderFormData {
+type ReaderFormData = {
   name: string;
   email: string;
   phone: number;
@@ -12,11 +13,13 @@ interface ReaderFormData {
 
 const ReaderForm: React.FC = () => {
   const { register, handleSubmit, formState } = useForm<ReaderFormData>();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: ReaderFormData) => {
     try {
       const response = await axios.post('http://localhost:8080/api/reader', data);
       console.log('Server Response:', response.data);
+      navigate('/readerList');
     } catch (error) {
       console.error('Error:', error);
     }

@@ -14,13 +14,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-interface CopyOfBook {
+type CopyOfBook = {
     title: string;
     copy_book_id: number;
     is_borrowed: boolean;
 }
 
-interface Borrowing {
+type Borrowing = {
     borrowing_id: number;
     copy_book_id: number;
     reader_id: number;

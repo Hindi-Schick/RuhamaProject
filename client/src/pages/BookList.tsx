@@ -7,7 +7,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 
-interface Book {
+type Book = {
   book_id: number;
   title: string;
   author: string;
