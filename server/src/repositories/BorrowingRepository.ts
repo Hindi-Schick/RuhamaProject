@@ -31,25 +31,28 @@ class BorrowingRepository {
     }
   }
 
-  static async returnBook(copy_book_id: number): Promise<CopyOfBook | undefined> {
-    const copyOfBook = await CopyOfBook.findOne({
-      where: { copy_book_id }, 
+  static async returnBook(borrow_id: number): Promise<CopyOfBook | undefined> { 
+    const borrowing = await Borrowing.findOne({
+      where: { borrowing_id: borrow_id }, 
     });
-
+  
+    if (!borrowing) {
+      throw new Error('Failed to find corresponding borrowing record');
+    }
+  
+    const copyOfBook = await CopyOfBook.findOne({
+      where: { copy_book_id: borrowing.copy_book_id },
+    });
+  
     if (!copyOfBook) {
       throw new Error('Failed to mark CopyOfBook as returned');
     }
-
+  
     if (!copyOfBook.is_borrowed) {
       throw new Error('The book has not yet been borrowed');
-    }
-    else {
-      CopyOfBookRepository.markBookAsReturned(copy_book_id);
-      const borrowing = await Borrowing.findOne({ where: { copy_book_id } });
-      if (!borrowing) {
-        throw new Error('Failed to find corresponding borrowing record');
-      }
-
+    } else {
+      CopyOfBookRepository.markBookAsReturned(copyOfBook.copy_book_id);
+  
       borrowing.return_date = new Date();
       await borrowing.save();
       return copyOfBook;

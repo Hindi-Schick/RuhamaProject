@@ -30,8 +30,8 @@ router.get('/api/borrowings', async (req, res) => {
 
 router.post('/api/returnBook', async (req, res) => {
   try {
-    const { copy_book_id } = req.body;
-    const returnedBook = await BorrowingRepository.returnBook(copy_book_id);
+    const { borrow_id } = req.body; 
+    const returnedBook = await BorrowingRepository.returnBook(borrow_id); 
 
     return res.json(returnedBook);
   } catch (error) {
