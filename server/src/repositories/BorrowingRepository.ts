@@ -2,6 +2,7 @@
 import { CopyOfBook } from '../entities/CopyOfBook';
 import { Borrowing } from '../entities/Borrowing';
 import CopyOfBookRepository from './CopyOfBookRepository';
+import { FindOptionsWhere } from 'typeorm';
 
 class BorrowingRepository {
   static async createBorrowing({ copy_book_id, reader_id}: number | any): Promise<Borrowing> {
@@ -57,6 +58,28 @@ class BorrowingRepository {
       await borrowing.save();
       return copyOfBook;
     }
+  }
+
+ static async getBorrowedBooksByReaderId({ readerId }: { readerId: string; }): Promise<Borrowing[]> {
+    const borrowedBooks = await Borrowing.find({
+      where: { reader_id: parseInt(readerId) } as FindOptionsWhere<Borrowing>,
+    });
+    return borrowedBooks;
+  }
+
+  static async getAllBorrowingsWithDetails(): Promise<any[]> {
+    const borrowings = await Borrowing.find({
+      relations: ['copy_book', 'reader'],
+    });
+    const formattedBorrowings = borrowings.map(borrowing => ({
+      borrowing_id: borrowing.borrowing_id,
+      book_title: borrowing.copy_book.title,
+      reader_name: borrowing.reader.name,
+      copy_book_id: borrowing.copy_book_id,
+      borrow_date: borrowing.borrow_date,
+      return_date: borrowing.return_date
+    }));
+    return formattedBorrowings;
   }
 }
 

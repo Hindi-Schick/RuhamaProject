@@ -19,7 +19,7 @@ function BorrowingList(props: any) {
     );
 }
 
-const VISIBLE_FIELDS = ['borrowing_id', 'copy_book_id', 'reader_id', 'book_id', 'borrow_date', 'return_date'];
+const VISIBLE_FIELDS = ['borrowing_id', 'copy_book_id', 'book_title', 'reader_name', 'borrow_date', 'return_date'];
 
 export default function BorrowingTable() {
     const { data: borrowingsData } = useQuery('borrowings', async () => {
@@ -27,13 +27,13 @@ export default function BorrowingTable() {
         return response.data;
     });
 
-    const rows = borrowingsData || []; // Set rows to an empty array if borrowingsData is undefined
+    const rows = borrowingsData || [];
 
     const columns = React.useMemo(
         () =>
             VISIBLE_FIELDS.map((field) => ({
                 field,
-                headerName: field.replace(/_/g, ' ').toUpperCase(), // Convert snake_case to Camel Case for header
+                headerName: field.replace(/_/g, ' ').toUpperCase(),
                 flex: 1,
             })),
         [],
@@ -49,7 +49,7 @@ export default function BorrowingTable() {
                 <DataGrid
                     rows={rows}
                     columns={columns}
-                    getRowId={(row) => row.borrowing_id} // Use the actual unique identifier property
+                    getRowId={(row) => row.borrowing_id}
                     slots={{
                         toolbar: BorrowingList,
                     }}

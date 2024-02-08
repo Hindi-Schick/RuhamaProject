@@ -25,7 +25,7 @@ export class Borrowing extends BaseEntity {
 
   @ManyToOne(() => CopyOfBook, { cascade: true })
   @JoinColumn({ name: "copy_book_id" })
-  book_instance: CopyOfBook;
+  copy_book: CopyOfBook;
 
   @ManyToOne(() => Reader, { cascade: true })
   @JoinColumn({ name: "reader_id" })

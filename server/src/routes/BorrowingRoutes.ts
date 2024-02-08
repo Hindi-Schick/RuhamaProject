@@ -2,7 +2,6 @@
 
 import express from 'express';
 import { BorrowingRepository } from '../repositories/BorrowingRepository';
-import { Borrowing } from '../entities/Borrowing';
 
 const router = express.Router();
 
@@ -20,7 +19,7 @@ router.post('/api/borrowing', async (req, res) => {
 
 router.get('/api/borrowings', async (req, res) => {
   try {
-    const borrowings = await Borrowing.find();
+    const borrowings = await BorrowingRepository.getAllBorrowingsWithDetails();
     return res.json(borrowings);
   } catch (error) {
     console.error(error);
@@ -30,10 +29,21 @@ router.get('/api/borrowings', async (req, res) => {
 
 router.post('/api/returnBook', async (req, res) => {
   try {
-    const { borrow_id } = req.body; 
-    const returnedBook = await BorrowingRepository.returnBook(borrow_id); 
+    const { borrow_id } = req.body;
+    const returnedBook = await BorrowingRepository.returnBook(borrow_id);
 
     return res.json(returnedBook);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/api/reader/:readerId/borrowed-books', async (req, res) => {
+  try {
+    const { readerId } = req.params;
+    const borrowedBooks = await BorrowingRepository.getBorrowedBooksByReaderId({ readerId });
+    return res.json(borrowedBooks);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
