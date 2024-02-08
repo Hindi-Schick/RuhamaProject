@@ -39,40 +39,60 @@ export default function BorrowingTable() {
         [],
     );
 
+    const handleReturnBook = async (borrow_id: any) => {
+        try {
+            await axios.post('http://localhost:8080/api/returnBook', { borrow_id });
+            // Refresh the borrowings data after returning the book
+            // This will re-fetch the borrowings list to reflect the updated data
+            // Assuming you're using react-query, you can invalidate the query here
+        } catch (error) {
+            console.error(error);
+            // Handle error if needed
+        }
+    };
+
     return (
         <div>
-        <Grid container spacing={2}>
-            <Grid item>
-                <Box id="filter-panel" />
-            </Grid>
-            <Grid item style={{ height: 400, width: '100%' }}>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    getRowId={(row) => row.borrowing_id}
-                    slots={{
-                        toolbar: BorrowingList,
-                    }}
-                    initialState={{
-                        filter: {
-                            filterModel: {
-                                items: [],
-                                quickFilterExcludeHiddenColumns: true,
+            <Grid container spacing={2}>
+                <Grid item>
+                    <Box id="filter-panel" />
+                </Grid>
+                <Grid item style={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        getRowId={(row) => row.borrowing_id}
+                        slots={{
+                            toolbar: BorrowingList,
+                        }}
+                        initialState={{
+                            filter: {
+                                filterModel: {
+                                    items: [],
+                                    quickFilterExcludeHiddenColumns: true,
+                                },
                             },
-                        },
-                    }}
-                />
+                        }}
+                    />
+                </Grid>
             </Grid>
-        </Grid>
-         <Button
-         component={Link}
-         to="/addBorrowing"  
-         variant="contained"
-         color="primary"
-         style={{ margin: '16px' }}
-       >
-         Borrow a book
-       </Button>
-       </div>
+            <Button
+                component={Link}
+                to="/addBorrowing"
+                variant="contained"
+                color="primary"
+                style={{ margin: '16px' }}
+            >
+                Borrow a book
+            </Button>
+            <Button
+                variant="contained"
+                color="secondary"
+                style={{ margin: '16px' }}
+                onClick={() => handleReturnBook(rows.borrowing_id)}
+            >
+                Return Book
+            </Button>
+        </div>
     );
 };
