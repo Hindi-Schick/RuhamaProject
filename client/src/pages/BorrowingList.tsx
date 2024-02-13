@@ -35,6 +35,10 @@ export default function BorrowingTable() {
                 field,
                 headerName: field.replace(/_/g, ' ').toUpperCase(),
                 flex: 1,
+                ...(field === 'borrow_date' || field === 'return_date' ? {
+                    type: 'date',
+                    valueFormatter: (params: any) => params.value ? new Date(params.value).toLocaleDateString() : null,
+                } : {}),
             })),
         [],
     );
