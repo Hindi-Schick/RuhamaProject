@@ -39,7 +39,9 @@ export default function BorrowingTable() {
         [],
     );
 
-    const handleReturnBook = async (borrow_id: any) => {
+    const handleReturnBook = async (borrow_id: number) => {
+        console.log(borrow_id);
+        
         try {
             await axios.post('http://localhost:8080/api/returnBook', { borrow_id });
             // Refresh the borrowings data after returning the book
@@ -89,8 +91,8 @@ export default function BorrowingTable() {
                 variant="contained"
                 color="secondary"
                 style={{ margin: '16px' }}
-                onClick={() => handleReturnBook(rows.borrowing_id)}
-            >
+                onClick={() => handleReturnBook(rows[0]?.borrowing_id)}
+                >
                 Return Book
             </Button>
         </div>

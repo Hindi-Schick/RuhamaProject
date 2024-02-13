@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Grid, Select, FormControl, SelectChangeEvent, InputLabel, MenuItem } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 type BorrowingFormData = {
@@ -24,12 +25,14 @@ type Reader = {
 }
 
 const BorrowingForm: React.FC = () => {
+  const navigate = useNavigate();
   const { register, handleSubmit, formState, setValue } = useForm<BorrowingFormData>();
 
   const onSubmit = async (data: BorrowingFormData) => {
     try {
       const response = await axios.post('http://localhost:8080/api/borrowing', data);
       console.log('Server Response:', response.data);
+      navigate('/borrowing');
     } catch (error) {
       console.error('Error:', error);
     }
@@ -71,11 +74,13 @@ const BorrowingForm: React.FC = () => {
               {...register('copy_book_id', { required: true })}
               onChange={handleSelectChange}
             >
-              {copyBooks.map((copyOfBook) => (
-                <MenuItem key={copyOfBook.copy_book_id} value={copyOfBook.copy_book_id}>
-                  {copyOfBook.title}
-                </MenuItem>
-              ))}
+              {copyBooks
+                .filter((copyOfBook) => !copyOfBook.is_borrowed) 
+                .map((copyOfBook) => (
+                  <MenuItem key={copyOfBook.copy_book_id} value={copyOfBook.copy_book_id}>
+                    {copyOfBook.title}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
         </Grid>

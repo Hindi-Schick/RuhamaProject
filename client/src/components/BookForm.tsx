@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Grid, Select, MenuItem, InputLabel, FormControl, SelectChangeEvent } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // Define the type for form data
@@ -31,6 +32,7 @@ const BookForm: React.FC = () => {
   });
 
   const [publishers, setPublishers] = useState<Publisher[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPublishers = async () => {
@@ -85,6 +87,7 @@ const BookForm: React.FC = () => {
 
           // Log the server response (optional)
           console.log(`Server Response (Copy ${i}):`, copyResponse.data);
+          navigate('/booklist');
         }
       }
     } catch (error) {
