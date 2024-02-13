@@ -27,4 +27,14 @@ router.get('/api/readers', async (req, res) => {
   }
 });
 
+router.get('/api/notReturn', async (req, res) => {
+  try {
+    const readers = await ReaderRepository.getReadersWithOverdueBooks();
+    return res.json(readers);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 export { router as readerRouter };
