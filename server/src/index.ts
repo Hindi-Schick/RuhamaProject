@@ -1,29 +1,16 @@
 import express from 'express';
-import { createConnection } from 'typeorm';
-import cors from 'cors'; 
 import { bookRouter } from './routes/BookRoutes';
 import { borrowingRouter } from './routes/BorrowingRoutes';
 import { copyOfBookRouter } from './routes/CopyOfBookRoutes';
 import { publisherRouter } from './routes/PublisherRoutes';
 import { readerRouter } from './routes/ReaderRoutes';
+import { AppDataSource } from './dbConfig';
 
 const app = express();
 
-app.use(cors());
-
 const main = async () => {
   try {
-    await createConnection({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'library_db',
-      entities: ["src/entities/*.ts"],
-      synchronize: true,
-    });
-
+    AppDataSource.initialize()
     console.log('Connected to Postgres');
 
     app.use(express.json());
