@@ -3,6 +3,7 @@ import { CopyOfBook } from '../entities/CopyOfBook';
 import { Borrowing } from '../entities/Borrowing';
 import CopyOfBookRepository from './CopyOfBookRepository';
 import { FindOptionsWhere } from 'typeorm';
+import { Book } from '../entities/Book';
 
 class BorrowingRepository {
   static async createBorrowing({ copy_book_id, reader_id}: number | any): Promise<Borrowing> {
@@ -81,6 +82,29 @@ class BorrowingRepository {
     }));
     return formattedBorrowings;
   }
+
+  static async getTop10MostBorrowedBooks(): Promise<Book[]> {
+    const borrowings = await Borrowing.find();
+
+    const bookCounts: { [key: string]: number } = {};
+    for (const borrowing of borrowings) {
+      const bookIdStr = borrowing.book_id.toString();
+      if (!bookCounts[bookIdStr]) {
+        bookCounts[bookIdStr] = 1;
+      } else {
+        bookCounts[bookIdStr]++;
+      }
+    }
+
+    const sortedBookIds = Object.keys(bookCounts).sort((a, b) => bookCounts[b] - bookCounts[a]).slice(0, 3);
+    const top10Books: Book[] = await Promise.all(sortedBookIds.map(async (bookId) => {
+      const book = await Book.findOne({ where: { book_id: parseInt(bookId) } });
+      return book!;
+    }));
+
+    return top10Books;
+  }
 }
+
 
 export { BorrowingRepository };

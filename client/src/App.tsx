@@ -1,20 +1,10 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
-
-import BookForm from './components/BookForm';
-import BorrowingForm from './components/BorrowingForm';
-import PublisherForm from './components/PublisherForm';
-import ReaderForm from './components/ReaderForm';
-import BookList from './pages/BookList';
 import Navbar from './components/Navbar';
-import HomePage from './pages/HomePage';
-import ReaderList from './pages/ReaderList';
-import QuickFilterOutsideOfGrid from './pages/BorrowingList'; // Import the new component
-
 import './App.css';
-import BorrowedBooks from './components/BorrowedBooks';
+import AppRoutes from './routes/AppRoutes';
 
 const queryClient = new QueryClient();
 
@@ -28,17 +18,7 @@ const App: React.FC = () => {
         <Router>
           <Navbar />
           <Container>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/addBook" element={<BookForm />} />
-              <Route path="/addBorrowing" element={<BorrowingForm />} />
-              <Route path="/borrowing" element={<QuickFilterOutsideOfGrid />} /> {/* New route */}
-              <Route path="/publisher" element={<PublisherForm />} />
-              <Route path="/reader" element={<ReaderForm />} />
-              <Route path="/bookList" element={<BookList />} />
-              <Route path="/readerList" element={<ReaderList />} />
-              <Route path="/reader/:readerId/borrowed-books" element={<BorrowedBooks/>} />
-            </Routes>
+            <AppRoutes/>
           </Container>
         </Router>
       </ThemeProvider>
