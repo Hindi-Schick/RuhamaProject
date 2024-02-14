@@ -100,7 +100,6 @@ const BorrowingForm: React.FC = () => {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          {/* Move the Button inside a grid item */}
           <Button type="submit" variant="contained" disabled={formState.isSubmitting}>
             Submit
           </Button>

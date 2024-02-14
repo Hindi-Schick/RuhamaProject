@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors'; 
 import { bookRouter } from './routes/BookRoutes';
 import { borrowingRouter } from './routes/BorrowingRoutes';
 import { copyOfBookRouter } from './routes/CopyOfBookRoutes';
@@ -11,8 +12,10 @@ const app = express();
 const main = async () => {
   try {
     AppDataSource.initialize()
+
     console.log('Connected to Postgres');
 
+    app.use(cors());
     app.use(express.json());
     app.use(bookRouter);
     app.use(borrowingRouter);
