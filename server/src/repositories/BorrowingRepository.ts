@@ -96,7 +96,7 @@ class BorrowingRepository {
       }
     }
 
-    const sortedBookIds = Object.keys(bookCounts).sort((a, b) => bookCounts[b] - bookCounts[a]).slice(0, 3);
+    const sortedBookIds = Object.keys(bookCounts).sort((a, b) => bookCounts[b] - bookCounts[a]).slice(0, 10);
     const top10Books: Book[] = await Promise.all(sortedBookIds.map(async (bookId) => {
       const book = await Book.findOne({ where: { book_id: parseInt(bookId) } });
       return book!;

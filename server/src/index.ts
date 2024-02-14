@@ -5,7 +5,7 @@ import { borrowingRouter } from './routes/BorrowingRoutes';
 import { copyOfBookRouter } from './routes/CopyOfBookRoutes';
 import { publisherRouter } from './routes/PublisherRoutes';
 import { readerRouter } from './routes/ReaderRoutes';
-import { AppDataSource } from './dbConfig';
+import { AppDataSource } from '../dbConfig';
 
 const app = express();
 
