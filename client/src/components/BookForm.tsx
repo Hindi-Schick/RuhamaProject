@@ -58,43 +58,41 @@ const BookForm: React.FC = () => {
   const onSubmit = async (data: BookFormData) => {
     try {
       const { numCopies, ...bookData } = data;
-
-      // Send data to your server API endpoint to create a new book
+  
+      if (numCopies <= 0) {
+        alert('It is not possible to add a book without copies');
+        return;
+      }
+  
       const response = await axios.post(
         'http://localhost:8080/api/book',
         bookData
       );
-
-      // Log the server response (optional)
+  
       console.log('Server Response (Book):', response.data);
-
-      // Now handle the creation of copies if numCopies is greater than 1
-      if (numCopies > 1) {
-        // You can use a loop to create copies, or handle it based on your server's API
-        for (let i = 2; i <= numCopies; i++) {
-          // Customize the copy data as needed
-          const copyData = {
-            title: bookData.title,
-            book_id: response.data.book_id, // Assuming the API returns the book_id
-            is_borrowed: false, // You may customize this based on your requirements
-          };
-
-          // Send data to your server API endpoint to create a new copy
-          const copyResponse = await axios.post(
-            'http://localhost:8080/api/copyOfBook',
-            copyData
-          );
-
-          // Log the server response (optional)
-          console.log(`Server Response (Copy ${i}):`, copyResponse.data);
-          navigate('/booklist');
-        }
+  
+      for (let i = 1; i <= numCopies; i++) {
+        // Customize the copy data as needed
+        const copyData = {
+          title: bookData.title,
+          book_id: response.data.book_id, 
+          is_borrowed: false, 
+        };
+  
+        const copyResponse = await axios.post(
+          'http://localhost:8080/api/copyOfBook',
+          copyData
+        );
+  
+        console.log(`Server Response (Copy ${i}):`, copyResponse.data);
+        navigate('/booklist');
       }
     } catch (error) {
       // Handle errors (e.g., show an error message to the user)
       console.error('Error:', error);
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

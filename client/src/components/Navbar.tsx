@@ -12,34 +12,40 @@ const Navbar: React.FC = () => {
 
   return (
     <div>
-      <AppBar position="fixed" style={{ width: '100%' }}>       
-       <Toolbar>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          onClick={() => toggleDrawer(true)}
-          sx={{ display: { xs: 'block', md: 'none' } }}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}>
-          Ruhama Library
-        </Typography>
-        <Button color="inherit" component={Link} to="/bookList" sx={{ display: { xs: 'none', md: 'block' } }}>
-          Book
-        </Button>
-        <Button color="inherit" component={Link} to="/borrowing" sx={{ display: { xs: 'none', md: 'block' } }}>
-          Borrowing
-        </Button>
-        {/* <Button color="inherit" component={Link} to="/publisher" sx={{ display: { xs: 'none', md: 'block' } }}>
+      <AppBar position="fixed" style={{ width: '100%' }}>
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={() => toggleDrawer(true)}
+            sx={{ display: { xs: 'block', md: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}>
+            Ruhama Library
+          </Typography>
+          <Button color="inherit" component={Link} to="/bookList" sx={{ display: { xs: 'none', md: 'block' } }}>
+            Book
+          </Button>
+          <Button color="inherit" component={Link} to="/borrowing" sx={{ display: { xs: 'none', md: 'block' } }}>
+            Borrowing
+          </Button>
+          {/* <Button color="inherit" component={Link} to="/publisher" sx={{ display: { xs: 'none', md: 'block' } }}>
           Publisher
         </Button> */}
-        <Button color="inherit" component={Link} to="/readerList" sx={{ display: { xs: 'none', md: 'block' } }}>
-          Reader
-        </Button>
-      </Toolbar>
+          <Button color="inherit" component={Link} to="/readerList" sx={{ display: { xs: 'none', md: 'block' } }}>
+            Reader
+          </Button>
+          <Button color="inherit" component={Link} to="/topTen" sx={{ display: { xs: 'none', md: 'block' } }}>
+            Top 10
+          </Button>
+          <Button color="inherit" component={Link} to="/overdueReaders" sx={{ display: { xs: 'none', md: 'block' } }}>
+            Overdue Readers
+          </Button>
+        </Toolbar>
       </AppBar>
       <Drawer anchor="left" open={drawerOpen} onClose={() => toggleDrawer(false)}>
         <List>

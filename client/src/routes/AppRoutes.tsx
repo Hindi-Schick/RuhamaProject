@@ -8,6 +8,8 @@ import BookList from "../pages/BookList"
 import ReaderList from "../pages/ReaderList"
 import BorrowedBooks from "../components/BorrowedBooks"
 import BorrowingTable from "../pages/BorrowingList"
+import TopTen from "../pages/TopTen"
+import OverdueReaderList from "../pages/OverdueReaderList"
 
 function AppRoutes() {
   return (
@@ -21,6 +23,8 @@ function AppRoutes() {
       <Route path="/bookList" element={<BookList />} />
       <Route path="/readerList" element={<ReaderList />} />
       <Route path="/reader/:readerId/borrowed-books" element={<BorrowedBooks />} />
+      <Route path="/topTen" element={<TopTen />} />
+      <Route path="/overdueReaders" element={<OverdueReaderList />} />
     </Routes>
   )
 }
