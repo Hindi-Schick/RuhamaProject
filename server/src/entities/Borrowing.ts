@@ -10,6 +10,12 @@ export class Borrowing extends BaseEntity {
   borrowing_id: number;
 
   @Column()
+  copy_book_id: number;
+
+  @Column()
+  reader_id: number;
+
+  @Column()
   borrow_date: Date;
 
   @Column({ type: 'date', nullable: true })

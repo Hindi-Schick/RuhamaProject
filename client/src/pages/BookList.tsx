@@ -55,11 +55,11 @@ const BookList: React.FC = () => {
   return (
     <div>
       <h2>Book List</h2>
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {books.map((book) => (
           <Grid key={book.book_id} item xs={12} sm={6} md={3}>
-            <Card style={{ marginBottom: '16px', backgroundColor: '#f0f0f0' }}>
-              <CardContent>
+            <Card sx={{ minWidth: 200, marginBottom: '16px', backgroundColor: '#f0f0f0' }}>
+             <CardContent>
                 <Typography variant="h6">{book.title}</Typography>
                 <Typography variant="body2" color="textSecondary">
                   {book.author}
