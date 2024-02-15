@@ -19,7 +19,6 @@ class BorrowingRepository {
     } 
     else {
       const borrowing = Borrowing.create({
-        copy_book_id,
         reader_id,
         borrow_date: new Date(), 
         return_date: undefined, 
@@ -34,31 +33,34 @@ class BorrowingRepository {
 
   static async returnBook(borrow_id: number): Promise<Borrowing | undefined> {
     const borrowing = await Borrowing.findOne({
-      where: { borrowing_id: borrow_id }, 
+        where: { borrowing_id: borrow_id }, 
     });
   
     if (!borrowing) {
-      throw new Error('Failed to find corresponding borrowing record');
+        throw new Error('Failed to find corresponding borrowing record');
     }
   
+    const copy_book_id = borrowing.copy_book_id; 
     const copyOfBook = await CopyOfBook.findOne({
-      where: { copy_book_id: borrowing.copy_book_id },
+        where: { copy_book_id },
     });
     
     if (!copyOfBook) {
-      throw new Error('Failed to mark CopyOfBook as returned');
+        throw new Error('Failed to mark CopyOfBook as returned');
     }
   
     if (!copyOfBook.is_borrowed) {
-      throw new Error('The book has not yet been borrowed');
+      console.log(copyOfBook.is_borrowed);
+      console.log(borrowing.borrowing_id);
+        throw new Error('The book has not yet been borrowed');
     } else {
-      CopyOfBookRepository.markBookAsReturned(copyOfBook.copy_book_id);
+        CopyOfBookRepository.markBookAsReturned(copyOfBook.copy_book_id);
   
-      borrowing.return_date = new Date();
-      await borrowing.save();
-      return borrowing;
+        borrowing.return_date = new Date();
+        await borrowing.save();
+        return borrowing;
     }
-  }
+}
 
  static async getBorrowedBooksByReaderId({ readerId }: { readerId: string; }): Promise<Borrowing[]> {
   const borrowedBooks = await Borrowing.find({

@@ -27,7 +27,7 @@ router.get('/api/borrowings', async (req, res) => {
   }
 });
 
-router.post('/api/returnBook', async (req, res) => {
+router.patch('/api/returnBook', async (req, res) => {
   try {
     const { borrow_id } = req.body;
     const returnedBook = await BorrowingRepository.returnBook(borrow_id);

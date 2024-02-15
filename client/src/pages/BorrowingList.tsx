@@ -5,7 +5,8 @@ import Grid from '@mui/material/Grid';
 import { DataGrid, GridToolbarQuickFilter, GridToolbar } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
+import { GridApi as GridApiCommunity } from '@mui/x-data-grid';
 import axios from 'axios';
 
 function BorrowingList(props: any) {
@@ -19,7 +20,7 @@ function BorrowingList(props: any) {
     );
 }
 
-const VISIBLE_FIELDS = ['borrowing_id', 'copy_book_id', 'book_title', 'reader_name', 'borrow_date', 'return_date'];
+const VISIBLE_FIELDS = ['borrowing_id', 'book_title', 'reader_name', 'borrow_date', 'return_date'];
 
 export default function BorrowingTable() {
     const { data: borrowingsData } = useQuery('borrowings', async () => {
@@ -28,6 +29,8 @@ export default function BorrowingTable() {
     });
 
     const rows = borrowingsData || [];
+    const queryClient = useQueryClient();
+    const apiRef = React.useRef<GridApiCommunity>(null!);
 
     const columns = React.useMemo(
         () =>
@@ -45,15 +48,13 @@ export default function BorrowingTable() {
 
     const handleReturnBook = async (borrow_id: number) => {
         console.log(borrow_id);
-        
+
         try {
-            await axios.post('http://localhost:8080/api/returnBook', { borrow_id });
-            // Refresh the borrowings data after returning the book
-            // This will re-fetch the borrowings list to reflect the updated data
-            // Assuming you're using react-query, you can invalidate the query here
+            await axios.patch('http://localhost:8080/api/returnBook', { borrow_id });
+            await queryClient.refetchQueries('borrowings');
+
         } catch (error) {
             console.error(error);
-            // Handle error if needed
         }
     };
 
@@ -71,6 +72,7 @@ export default function BorrowingTable() {
                         slots={{
                             toolbar: BorrowingList,
                         }}
+                        apiRef={apiRef} // העבר את הרפרנס של ה-API לגריד
                         initialState={{
                             filter: {
                                 filterModel: {
@@ -95,10 +97,21 @@ export default function BorrowingTable() {
                 variant="contained"
                 color="secondary"
                 style={{ margin: '16px' }}
-                onClick={() => handleReturnBook(rows[0]?.borrowing_id)}
-                >
+                onClick={() => {
+                    const selectedRows = apiRef.current?.getSelectedRows(); 
+                    if (selectedRows && selectedRows.size > 0) {
+                        const firstSelectedRow = selectedRows.values().next().value; 
+                        if (firstSelectedRow) {
+                            handleReturnBook(firstSelectedRow.borrowing_id); 
+                        }
+                    } else {
+                        console.warn('No row selected'); 
+                    }
+                }}
+            >
                 Return Book
             </Button>
+
         </div>
     );
 };
