@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 type PublisherFormData = {
   name: string;
@@ -10,11 +11,13 @@ type PublisherFormData = {
 
 const PublisherForm: React.FC = () => {
   const { register, handleSubmit, formState } = useForm<PublisherFormData>();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: PublisherFormData) => {
     try {
       const response = await axios.post('http://localhost:8080/api/publisher', data);
       console.log('Server Response:', response.data);
+      navigate('/bookList');
     } catch (error) {
       console.error('Error:', error);
     }

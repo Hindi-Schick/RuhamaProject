@@ -11,6 +11,7 @@ type BookFormData = {
   publisher_id: number | '';
   published_date: string;
   numCopies: number;
+  price: number;
 }
 
 type Publisher = {
@@ -28,8 +29,10 @@ const BookForm: React.FC = () => {
     defaultValues: {
       publisher_id: '',
       numCopies: 1, // Default to 1 copy
+      price: 0, // Default price to 0
     },
   });
+  
 
   const [publishers, setPublishers] = useState<Publisher[]>([]);
   const navigate = useNavigate();
@@ -133,6 +136,14 @@ const BookForm: React.FC = () => {
             type="date"
             label="Published Date"
             {...register('published_date', { required: true })}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Price"
+            type="number"
+            {...register('price', { required: true, min: 0 })}
             fullWidth
           />
         </Grid>

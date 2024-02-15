@@ -1,8 +1,7 @@
-// entities/Book.ts
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Publisher } from "./Publisher";
 import { CopyOfBook } from "./CopyOfBook";
-import { Borrowing } from "./Borrowing";
+import { Borrowing } from "./Borrowing"; 
 
 @Entity("book")
 export class Book extends BaseEntity {
@@ -18,6 +17,9 @@ export class Book extends BaseEntity {
   @Column()
   publisher_id: number;
 
+  @Column()
+  price: number;
+
   @Column({ type: "date", nullable: true })
   published_date: Date;
 
@@ -25,9 +27,9 @@ export class Book extends BaseEntity {
   @JoinColumn({ name: "publisher_id" })
   publisher: Publisher;
 
-  @OneToMany(() => CopyOfBook, copyOfBook => copyOfBook.book_id)
+  @OneToMany(() => CopyOfBook, copyOfBook => copyOfBook.book) 
   copies: CopyOfBook[];
 
-  @OneToMany(() => Borrowing, borrowing => borrowing.book_id)
+  @OneToMany(() => Borrowing, borrowing => borrowing.book) 
   borrowings: Borrowing[];
 }

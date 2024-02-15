@@ -9,8 +9,8 @@ const router = express.Router();
 
 router.post('/api/book', async (req, res) => {
   try {
-    const { title, author, publisher_id, published_date } = req.body;
-    const book = await BookRepository.createBook({ title, author, publisher_id, published_date }); 
+    const { title, author, publisher_id, published_date, price } = req.body;
+    const book = await BookRepository.createBook({ title, author, publisher_id, published_date, price }); 
 
     return res.json(book);
   } catch (error) {

@@ -22,7 +22,7 @@ function AppRoutes() {
       <Route path="/reader" element={<ReaderForm />} />
       <Route path="/bookList" element={<BookList />} />
       <Route path="/readerList" element={<ReaderList />} />
-      <Route path="/reader/:readerId/borrowed-books" element={<BorrowedBooks />} />
+      <Route path="/reader/:readerId/borrowedBooks" element={<BorrowedBooks />} />
       <Route path="/topTen" element={<TopTen />} />
       <Route path="/overdueReaders" element={<OverdueReaderList />} />
     </Routes>

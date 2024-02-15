@@ -13,10 +13,17 @@ type Book = {
   author: string;
   publisher_id: number;
   published_date: Date;
+  price: number;
+}
+
+type Publisher = {
+  publisher_id: number;
+  name: string;
 }
 
 const BookList: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
+  const [publishers, setPublishers] = useState<Record<number, string>>({});
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -28,7 +35,21 @@ const BookList: React.FC = () => {
       }
     };
 
+    const fetchPublishers = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/publishers');
+        const publisherMap: Record<number, string> = {};
+        response.data.forEach((publisher: Publisher) => {
+          publisherMap[publisher.publisher_id] = publisher.name;
+        });
+        setPublishers(publisherMap);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchBooks();
+    fetchPublishers();
   }, []);
 
   return (
@@ -47,21 +68,24 @@ const BookList: React.FC = () => {
                   Published on {new Date(book.published_date).toLocaleDateString()}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  Publisher: {book.publisher_id}
+                  Publisher: {publishers[book.publisher_id]}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Price: {book.price}
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
-          <Button
+      <Button
         component={Link}
         to="/publisher"  
         variant="contained"
         color="primary"
         style={{ margin: '16px' }}
       >
-        Add Pablisher
+        Add Publisher
       </Button>
       <Button
         component={Link}

@@ -64,7 +64,7 @@ const ReaderList: React.FC = () => {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small" component={Link} to={`/reader/${reader.reader_id}/borrowed-books`}>
+                <Button size="small" component={Link} to={`/reader/${reader.reader_id}/borrowedBooks`}>
                   View Borrowed Books
                 </Button>
               </CardActions>

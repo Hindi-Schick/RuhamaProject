@@ -1,6 +1,7 @@
 // entities/CopyOfBook.ts
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Borrowing } from "./Borrowing";
+import { Book } from "./Book";
 
 @Entity("copy_of_book")
 export class CopyOfBook extends BaseEntity {
@@ -11,10 +12,11 @@ export class CopyOfBook extends BaseEntity {
   title: string;
 
   @Column()
-  book_id: number;
-
-  @Column()
   is_borrowed: boolean;
+
+  @ManyToOne(() => Book, book => book.copies)
+  @JoinColumn({ name: "book_id" })
+  book: Book;
 
   @OneToMany(() => Borrowing, borrowing => borrowing.copy_book)
   borrowings: Borrowing[];
