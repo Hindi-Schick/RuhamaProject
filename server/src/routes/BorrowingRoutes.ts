@@ -39,7 +39,7 @@ router.post('/api/returnBook', async (req, res) => {
   }
 });
 
-router.get('/api/reader/:readerId/borrowed-books', async (req, res) => {
+router.get('/api/reader/:readerId/borrowedBooks', async (req, res) => {
   try {
     const { readerId } = req.params;
     const borrowedBooks = await BorrowingRepository.getBorrowedBooksByReaderId({ readerId });

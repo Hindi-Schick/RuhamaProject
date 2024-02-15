@@ -3,6 +3,7 @@ import express from 'express';
 import { BookRepository } from '../repositories/BookRepository'; 
 import { Book } from '../entities/Book';
 import { BorrowingRepository } from '../repositories/BorrowingRepository';
+import { FindOneOptions } from 'typeorm';
 
 const router = express.Router();
 
@@ -22,6 +23,22 @@ router.get('/api/books', async (req, res) => {
   try {
     const books = await Book.find(); 
     return res.json(books);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/api/book/:bookId', async (req, res) => {
+  try {
+    const { bookId } = req.params;
+    const book = await Book.findOne(parseInt(bookId) as FindOneOptions<Book>); 
+
+    if (!book) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+
+    return res.json(book);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
