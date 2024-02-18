@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 type Book = {
   book_id: number;
@@ -24,6 +26,7 @@ type Publisher = {
 const BookList: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [publishers, setPublishers] = useState<Record<number, string>>({});
+  const [page, setPage] = React.useState(1);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -52,12 +55,20 @@ const BookList: React.FC = () => {
     fetchPublishers();
   }, []);
 
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
+  const itemsPerPage = 9;
+  const startIndex = (page - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
   return (
     <div>
       <h2>Book List</h2>
       <Grid container spacing={3}>
-        {books.map((book) => (
-          <Grid key={book.book_id} item xs={12} sm={6} md={3}>
+        {books.slice(startIndex, endIndex).map((book) => (
+          <Grid key={book.book_id} item xs={12} sm={6} md={4}>
             <Card sx={{ minWidth: 200, marginBottom: '16px', backgroundColor: '#f0f0f0' }}>
              <CardContent>
                 <Typography variant="h6">{book.title}</Typography>
@@ -78,6 +89,11 @@ const BookList: React.FC = () => {
           </Grid>
         ))}
       </Grid>
+      {books.length > itemsPerPage && (
+        <Stack spacing={2} sx={{ marginTop: '16px' }}>
+          <Pagination count={Math.ceil(books.length / itemsPerPage)} page={page} onChange={handleChange} />
+        </Stack>
+      )}
       <Button
         component={Link}
         to="/publisher"  
