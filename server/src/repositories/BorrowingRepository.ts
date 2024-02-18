@@ -5,68 +5,62 @@ import CopyOfBookRepository from './CopyOfBookRepository';
 import { Book } from '../entities/Book';
 
 class BorrowingRepository {
-  static async createBorrowing({ copy_book_id, reader_id}: { copy_book_id: number, reader_id: number }): Promise<Borrowing> {
+  static async createBorrowing({ copy_book_id, reader_id }: { copy_book_id: number; reader_id: number }): Promise<Borrowing> {
+    const copyOfBook = await CopyOfBook.findOneOrFail({ where: { copy_book_id } });
+    if (copyOfBook.is_borrowed) {
+      throw new Error('CopyOfBook is already borrowed');
+    }
+
+    copyOfBook.is_borrowed = true;
+    await copyOfBook.save();
+
+    const borrowing = Borrowing.create({
+      copy_book_id,
+      reader_id,
+      borrow_date: new Date(),
+      return_date: undefined,
+    });
+
+    await borrowing.save();
+    return borrowing;
+  }
+
+  static async returnBook(borrow_id: number): Promise<Borrowing | undefined> {
+    const borrowing = await Borrowing.findOne({
+      where: { borrowing_id: borrow_id },
+    });
+
+    if (!borrowing) {
+      throw new Error('Failed to find corresponding borrowing record');
+    }
+
+    const copy_book_id = borrowing.copy_book_id;
     const copyOfBook = await CopyOfBook.findOne({
-      where: { copy_book_id: copy_book_id },
+      where: { copy_book_id },
     });
 
     if (!copyOfBook) {
-      throw new Error('Failed to mark CopyOfBook as borrowed');
+      throw new Error('Failed to mark CopyOfBook as returned');
     }
 
-    if (copyOfBook.is_borrowed) {
-      throw new Error('CopyOfBook is already borrowed');
-    } 
-    else {
-      const borrowing = Borrowing.create({
-        reader_id,
-        borrow_date: new Date(), 
-        return_date: undefined, 
-      });
-      
-    CopyOfBookRepository.markBookAsBorrowed(copy_book_id);
+    if (!copyOfBook.is_borrowed) {
+      console.log(copyOfBook.is_borrowed);
+      console.log(borrowing.borrowing_id);
+      throw new Error('The book has not yet been borrowed');
+    } else {
+      CopyOfBookRepository.markBookAsReturned(copyOfBook.copy_book_id);
 
+      borrowing.return_date = new Date();
       await borrowing.save();
       return borrowing;
     }
   }
 
-  static async returnBook(borrow_id: number): Promise<Borrowing | undefined> {
-    const borrowing = await Borrowing.findOne({
-        where: { borrowing_id: borrow_id }, 
+  static async getBorrowedBooksByReaderId({ readerId }: { readerId: string; }): Promise<Borrowing[]> {
+    const borrowedBooks = await Borrowing.find({
+      where: { reader_id: parseInt(readerId) },
     });
-  
-    if (!borrowing) {
-        throw new Error('Failed to find corresponding borrowing record');
-    }
-  
-    const copy_book_id = borrowing.copy_book_id; 
-    const copyOfBook = await CopyOfBook.findOne({
-        where: { copy_book_id },
-    });
-    
-    if (!copyOfBook) {
-        throw new Error('Failed to mark CopyOfBook as returned');
-    }
-  
-    if (!copyOfBook.is_borrowed) {
-      console.log(copyOfBook.is_borrowed);
-      console.log(borrowing.borrowing_id);
-        throw new Error('The book has not yet been borrowed');
-    } else {
-        CopyOfBookRepository.markBookAsReturned(copyOfBook.copy_book_id);
-  
-        borrowing.return_date = new Date();
-        await borrowing.save();
-        return borrowing;
-    }
-}
 
- static async getBorrowedBooksByReaderId({ readerId }: { readerId: string; }): Promise<Borrowing[]> {
-  const borrowedBooks = await Borrowing.find({
-    where: { reader_id: parseInt(readerId) },
-  });
-  
     return borrowedBooks;
   }
 
@@ -85,28 +79,40 @@ class BorrowingRepository {
     return formattedBorrowings;
   }
 
-  static async getTop10MostBorrowedBooks(): Promise<Book[]> {
-    const borrowings = await Borrowing.find();
+  static async getTopBorrowedBooks(): Promise<Book[]> {
+    const borrowings = await Borrowing.find({
+      relations: ['book'], // Ensure the book relation is properly populated
+    });
 
-    const bookCounts: { [key: string]: number } = {};
-    for (const borrowing of borrowings) {
-      const bookIdStr = borrowing.book.toString();
-      if (!bookCounts[bookIdStr]) {
-        bookCounts[bookIdStr] = 1;
-      } else {
-        bookCounts[bookIdStr]++;
+    const bookBorrowCounts: { [key: number]: number } = {}; // Specify the type of the object
+
+    borrowings.forEach(borrowing => {
+      console.log(borrowing);
+      if (borrowing.book) { // Check if the book exists
+        const bookId = borrowing.book.book_id as number; // Specify the type as number        
+
+        if (bookBorrowCounts[bookId]) {
+          bookBorrowCounts[bookId]++;
+        } else {
+          bookBorrowCounts[bookId] = 1;
+        }
       }
-    }
+    });
 
-    const sortedBookIds = Object.keys(bookCounts).sort((a, b) => bookCounts[b] - bookCounts[a]).slice(0, 10);
-    const top10Books: Book[] = await Promise.all(sortedBookIds.map(async (bookId) => {
-      const book = await Book.findOne({ where: { book_id: parseInt(bookId) } });
-      return book!;
-    }));
+    const sortedBookBorrowCounts = Object.entries(bookBorrowCounts).sort((a, b) => b[1] - a[1]);
 
-    return top10Books;
+    const topBooksIds = sortedBookBorrowCounts.slice(0, 10).map(entry => parseInt(entry[0]));
+
+    const topBooksPromises = topBooksIds.map(async bookId => {
+      const book = await Book.findOne({ where: { book_id: bookId } }); // Use proper options
+      return book || null;
+    });
+
+    const topBooks = await Promise.all(topBooksPromises);
+
+    return topBooks.filter(book => book !== null) as Book[]; // Filter out null values
   }
-}
 
+}
 
 export { BorrowingRepository };

@@ -47,7 +47,7 @@ router.get('/api/book/:bookId', async (req, res) => {
 
 router.get('/api/top10', async (req, res) => {
   try {
-    const top10Books = await BorrowingRepository.getTop10MostBorrowedBooks();
+    const top10Books = await BorrowingRepository.getTopBorrowedBooks();
     return res.json(top10Books);
   } catch (error) {
     console.error(error);

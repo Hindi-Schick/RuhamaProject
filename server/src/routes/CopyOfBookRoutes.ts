@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.post('/api/copyOfBook', async (req, res) => {
   try {
-    const { title, book_id, is_borrowed } = req.body;
-    const copyOfBook = await CopyOfBookRepository.createCopyOfBook({ title, book_id, is_borrowed });
+    const { title, is_borrowed } = req.body;
+    const copyOfBook = await CopyOfBookRepository.createCopyOfBook({ title, is_borrowed });
 
     return res.json(copyOfBook);
   } catch (error) {

@@ -19,7 +19,7 @@ router.post('/api/reader', async (req, res) => {
 
 router.get('/api/readers', async (req, res) => {
   try {
-    const readers = await Reader.find(); 
+    const readers = await Reader.find();
     return res.json(readers);
   } catch (error) {
     console.error(error);
@@ -31,6 +31,22 @@ router.get('/api/notReturn', async (req, res) => {
   try {
     const readers = await ReaderRepository.getReadersWithOverdueBooks();
     return res.json(readers);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/api/reader/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reader = await Reader.findOne({ where: { reader_id: parseInt(id) } });
+    
+    if (!reader) {
+      return res.status(404).json({ error: 'Reader not found' });
+    }
+
+    return res.json(reader);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
