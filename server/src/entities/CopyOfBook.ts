@@ -14,7 +14,10 @@ export class CopyOfBook extends BaseEntity {
   @Column()
   is_borrowed: boolean;
 
-  @ManyToOne(() => Book, book => book.copies)
+  @ManyToOne(() => Book, (book) => book.copies, {
+    onDelete: "CASCADE",
+    eager: true
+  })
   @JoinColumn({ name: "book_id" })
   book: Book;
 

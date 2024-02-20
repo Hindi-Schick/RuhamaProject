@@ -6,24 +6,30 @@ import { Book } from '../entities/Book';
 
 class BorrowingRepository {
   static async createBorrowing({ copy_book_id, reader_id }: { copy_book_id: number; reader_id: number }): Promise<Borrowing> {
-    const copyOfBook = await CopyOfBook.findOneOrFail({ where: { copy_book_id } });
-    if (copyOfBook.is_borrowed) {
-      throw new Error('CopyOfBook is already borrowed');
+    try {
+      const copyOfBook = await CopyOfBook.findOneOrFail({ where: { copy_book_id }, relations: ['book'] });
+      if (copyOfBook.is_borrowed) {
+        throw new Error('CopyOfBook is already borrowed');
+      }
+  
+      copyOfBook.is_borrowed = true;
+      await copyOfBook.save();
+  
+      const borrowing = Borrowing.create({
+        copy_book_id,
+        reader_id,
+        borrow_date: new Date(),
+        return_date: undefined,
+        book: copyOfBook.book 
+      });
+  
+      await borrowing.save();
+      return borrowing;
+    } catch (error) {
+      throw new Error('Error creating borrowing: ' + error.message);
     }
-
-    copyOfBook.is_borrowed = true;
-    await copyOfBook.save();
-
-    const borrowing = Borrowing.create({
-      copy_book_id,
-      reader_id,
-      borrow_date: new Date(),
-      return_date: undefined,
-    });
-
-    await borrowing.save();
-    return borrowing;
   }
+  
 
   static async returnBook(borrow_id: number): Promise<Borrowing | undefined> {
     const borrowing = await Borrowing.findOne({

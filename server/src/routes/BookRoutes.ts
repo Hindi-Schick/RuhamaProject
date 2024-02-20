@@ -12,7 +12,7 @@ router.post('/api/book', async (req, res) => {
     const { title, author, publisher_id, published_date, price } = req.body;
     const book = await BookRepository.createBook({ title, author, publisher_id, published_date, price }); 
 
-    return res.json(book);
+    return res.json({ book_id: book.book_id });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });

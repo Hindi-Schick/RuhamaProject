@@ -27,9 +27,11 @@ export class Book extends BaseEntity {
   @JoinColumn({ name: "publisher_id" })
   publisher: Publisher;
 
-  @OneToMany(() => CopyOfBook, copyOfBook => copyOfBook.book) 
+  @OneToMany(() => CopyOfBook, (copyOfBook) => copyOfBook.book, {
+    onDelete: "CASCADE",
+  })
   copies: CopyOfBook[];
-
+  
   @OneToMany(() => Borrowing, borrowing => borrowing.book) 
   borrowings: Borrowing[];
 }

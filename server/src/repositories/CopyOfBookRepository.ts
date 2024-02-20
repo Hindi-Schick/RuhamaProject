@@ -2,10 +2,11 @@
 import { CopyOfBook } from '../entities/CopyOfBook';
 
 class CopyOfBookRepository {
-  static async createCopyOfBook({ title, is_borrowed }: any): Promise<CopyOfBook> {
+  static async createCopyOfBook({ title, is_borrowed, book_id }: any): Promise<CopyOfBook> {
     const copyOfBook = CopyOfBook.create({
       title,
       is_borrowed,
+      book: { book_id },
     });
 
     await copyOfBook.save();

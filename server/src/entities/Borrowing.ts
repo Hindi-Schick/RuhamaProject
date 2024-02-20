@@ -29,7 +29,7 @@ export class Borrowing extends BaseEntity {
   @JoinColumn({ name: "reader_id" })
   reader: Reader;
 
-  @ManyToOne(() => Book, book => book.borrowings)
+  @ManyToOne(() => Book, { cascade: true })
   @JoinColumn({ name: "book_id" })
   book: Book;
 }
