@@ -6,7 +6,7 @@ import { DataGrid, GridToolbarQuickFilter, GridToolbar } from '@mui/x-data-grid'
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from 'react-query';
-import { GridApi as GridApiCommunity } from '@mui/x-data-grid';
+import { useGridApiRef } from '@mui/x-data-grid';
 import axios from 'axios';
 
 function BorrowingList(props: any) {
@@ -30,7 +30,7 @@ export default function BorrowingTable() {
 
     const rows = borrowingsData || [];
     const queryClient = useQueryClient();
-    const apiRef = React.useRef<GridApiCommunity>(null!);
+    const apiRef = useGridApiRef();
 
     const columns = React.useMemo(
         () =>
@@ -72,7 +72,7 @@ export default function BorrowingTable() {
                         slots={{
                             toolbar: BorrowingList,
                         }}
-                        apiRef={apiRef} // העבר את הרפרנס של ה-API לגריד
+                        apiRef={apiRef}
                         initialState={{
                             filter: {
                                 filterModel: {

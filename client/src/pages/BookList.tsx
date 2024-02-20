@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
 type Book = {
   book_id: number;
@@ -27,6 +28,7 @@ const BookList: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [publishers, setPublishers] = useState<Record<number, string>>({});
   const [page, setPage] = React.useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -63,14 +65,26 @@ const BookList: React.FC = () => {
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
+  const filteredBooks = books.filter(book =>
+    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    book.author.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div>
       <h2>Book List</h2>
-      <Grid container spacing={3}>
-        {books.slice(startIndex, endIndex).map((book) => (
+      <TextField
+        label="Search Book"
+        variant="outlined"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ marginBottom: '16px' }}
+      />
+      <Grid container spacing={2}>
+        {filteredBooks.slice(startIndex, endIndex).map((book) => (
           <Grid key={book.book_id} item xs={12} sm={6} md={4}>
             <Card sx={{ minWidth: 200, marginBottom: '16px', backgroundColor: '#f0f0f0' }}>
-             <CardContent>
+              <CardContent>
                 <Typography variant="h6">{book.title}</Typography>
                 <Typography variant="body2" color="textSecondary">
                   {book.author}
@@ -89,14 +103,14 @@ const BookList: React.FC = () => {
           </Grid>
         ))}
       </Grid>
-      {books.length > itemsPerPage && (
+      {filteredBooks.length > itemsPerPage && (
         <Stack spacing={2} sx={{ marginTop: '16px' }}>
-          <Pagination count={Math.ceil(books.length / itemsPerPage)} page={page} onChange={handleChange} />
+          <Pagination count={Math.ceil(filteredBooks.length / itemsPerPage)} page={page} onChange={handleChange} />
         </Stack>
       )}
       <Button
         component={Link}
-        to="/publisher"  
+        to="/publisher"
         variant="contained"
         color="primary"
         style={{ margin: '16px' }}
@@ -105,7 +119,7 @@ const BookList: React.FC = () => {
       </Button>
       <Button
         component={Link}
-        to="/addBook"  
+        to="/addBook"
         variant="contained"
         color="primary"
         style={{ margin: '16px' }}
