@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Publisher } from "./Publisher";
 import { CopyOfBook } from "./CopyOfBook";
-import { Borrowing } from "./Borrowing"; 
+import { Borrowing } from "./Borrowing";
 
 @Entity("book")
 export class Book extends BaseEntity {
@@ -23,6 +23,9 @@ export class Book extends BaseEntity {
   @Column({ type: "date", nullable: true })
   published_date: Date;
 
+  @Column({ type: 'timestamp', nullable: true })
+  deleted_at: Date;
+
   @ManyToOne(() => Publisher, { cascade: true })
   @JoinColumn({ name: "publisher_id" })
   publisher: Publisher;
@@ -31,7 +34,7 @@ export class Book extends BaseEntity {
     onDelete: "CASCADE",
   })
   copies: CopyOfBook[];
-  
-  @OneToMany(() => Borrowing, borrowing => borrowing.book) 
+
+  @OneToMany(() => Borrowing, borrowing => borrowing.book)
   borrowings: Borrowing[];
 }

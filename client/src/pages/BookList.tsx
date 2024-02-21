@@ -12,6 +12,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { IconButton } from '@mui/material';
 import { PlusOne } from '@mui/icons-material';
+import { GridDeleteIcon } from '@mui/x-data-grid';
 
 type Book = {
   book_id: number;
@@ -74,13 +75,13 @@ const BookList: React.FC = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setNumCopies(1); 
+    setNumCopies(1);
   };
 
   const handleSave = async () => {
     setOpen(false);
     await addCopy();
-    fetchBooks(); 
+    fetchBooks();
   };
 
   const addCopy = async () => {
@@ -92,6 +93,17 @@ const BookList: React.FC = () => {
       });
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleDelete = async (bookId: number) => {
+    if (window.confirm('Are you sure you want to delete this book?')) {
+      try {
+        await axios.delete(`http://localhost:8080/api/book/${bookId}`);
+        fetchBooks(); 
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -135,6 +147,9 @@ const BookList: React.FC = () => {
                 <IconButton onClick={() => handleOpen(book)} color="primary" aria-label="add copy">
                   <PlusOne />
                 </IconButton>
+                <IconButton aria-label="delete" onClick={() => handleDelete(book.book_id)} >
+                <GridDeleteIcon />
+                  </IconButton>
               </CardContent>
             </Card>
           </Grid>

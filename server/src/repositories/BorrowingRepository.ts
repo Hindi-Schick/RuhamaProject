@@ -11,25 +11,29 @@ class BorrowingRepository {
       if (copyOfBook.is_borrowed) {
         throw new Error('CopyOfBook is already borrowed');
       }
-  
+
       copyOfBook.is_borrowed = true;
       await copyOfBook.save();
-  
+
       const borrowing = Borrowing.create({
         copy_book_id,
         reader_id,
         borrow_date: new Date(),
         return_date: undefined,
-        book: copyOfBook.book 
+        book: copyOfBook.book
       });
-  
+
       await borrowing.save();
       return borrowing;
     } catch (error) {
       throw new Error('Error creating borrowing: ' + error.message);
     }
   }
-  
+
+  static async isBookBorrowed(bookId: number): Promise<boolean> {
+    const copyOfBook = await CopyOfBook.findOne({ where: { book: { book_id: bookId } } });
+    return copyOfBook ? copyOfBook.is_borrowed : false;
+  }
 
   static async returnBook(borrow_id: number): Promise<Borrowing | undefined> {
     const borrowing = await Borrowing.findOne({

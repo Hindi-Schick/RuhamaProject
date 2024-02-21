@@ -55,4 +55,15 @@ router.get('/api/top10', async (req, res) => {
   }
 });
 
+router.delete('/api/book/:bookId', async (req, res) => {
+  try {
+    const { bookId } = req.params;
+    await BookRepository.deleteBook(parseInt(bookId));
+    return res.json({ message: 'Book deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 export { router as bookRouter };
