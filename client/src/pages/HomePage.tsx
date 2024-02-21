@@ -9,7 +9,7 @@ const HomePage: React.FC = () => {
         Welcome Ruhama Library! 
       </Typography>
       <Typography variant="body1" sx={{ marginBottom: 2 }}>
-        This is a beautifully designed home page for your app.
+      This is a library like no other.
       </Typography>
       <Button variant="contained" color="primary" component={Link} to="/bookList" sx={{ marginRight: 2 }}>
         Explore Books
