@@ -34,6 +34,24 @@ class ReaderRepository {
 
     return readersWithOverdueBooks;
   }
+
+  static async deleteReader(readerId: number): Promise<Reader | undefined | null> {
+    const reader = await Reader.findOne({ where: { reader_id: readerId } });
+
+    if (reader) {
+      const borrowings = await BorrowingRepository.getBorrowedBooksByReaderId({ readerId: reader?.reader_id.toString() });
+      const hasUnreturnedBooks = borrowings.some(borrowing => !borrowing.return_date);
+
+      if (hasUnreturnedBooks) {
+        throw new Error('Cannot delete reader with unreturned books');
+      }
+
+      reader.deleted_at = new Date();
+      await reader.save();
+    }
+
+    return reader;
+  }
 }
 
 export default ReaderRepository;

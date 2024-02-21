@@ -10,9 +10,13 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import { IconButton } from '@mui/material';
+import { Alert, IconButton } from '@mui/material';
 import { PlusOne } from '@mui/icons-material';
 import { GridDeleteIcon } from '@mui/x-data-grid';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 
 type Book = {
   book_id: number;
@@ -36,6 +40,9 @@ const BookList: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [numCopies, setNumCopies] = useState(1);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [bookIdToDelete, setBookIdToDelete] = useState<number | null>(null);
+  const [deleteError, setDeleteError] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -96,14 +103,28 @@ const BookList: React.FC = () => {
     }
   };
 
+  const handleDeleteDialogOpen = (bookId: number) => {
+    setBookIdToDelete(bookId);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteDialogClose = () => {
+    setDeleteDialogOpen(false);
+    setBookIdToDelete(null);
+  };
+
   const handleDelete = async (bookId: number) => {
-    if (window.confirm('Are you sure you want to delete this book?')) {
-      try {
-        await axios.delete(`http://localhost:8080/api/book/${bookId}`);
-        fetchBooks(); 
-      } catch (error) {
-        console.error(error);
-      }
+    try {
+      await axios.delete(`http://localhost:8080/api/book/${bookId}`);
+      fetchBooks();
+      handleDeleteDialogClose(); 
+      setDeleteError(false);
+    } catch (error) {
+      console.error(error);
+      setDeleteError(true);
+      handleDeleteDialogClose(); 
+    } finally {
+      setTimeout(() => setDeleteError(false), 3000);
     }
   };
 
@@ -147,9 +168,9 @@ const BookList: React.FC = () => {
                 <IconButton onClick={() => handleOpen(book)} color="primary" aria-label="add copy">
                   <PlusOne />
                 </IconButton>
-                <IconButton aria-label="delete" onClick={() => handleDelete(book.book_id)} >
-                <GridDeleteIcon />
-                  </IconButton>
+                <IconButton aria-label="delete" onClick={() => handleDeleteDialogOpen(book.book_id)} >
+                  <GridDeleteIcon />
+                </IconButton>
               </CardContent>
             </Card>
           </Grid>
@@ -160,6 +181,20 @@ const BookList: React.FC = () => {
           <Pagination count={Math.ceil(filteredBooks.length / itemsPerPage)} page={page} onChange={handleChange} />
         </Stack>
       )}
+      <Dialog open={deleteDialogOpen} onClose={handleDeleteDialogClose}>
+        <DialogTitle>Delete Book</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this book?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteDialogClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={() => handleDelete(bookIdToDelete!)} color="primary">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Modal open={open} onClose={handleClose}>
         <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4 }}>
           <Typography variant="h6">Add Copies</Typography>
@@ -172,6 +207,11 @@ const BookList: React.FC = () => {
           </Button>
         </Box>
       </Modal>
+      {deleteError && (
+        <Alert variant="outlined" severity="error">
+        This is an outlined error Alert.
+      </Alert>
+      )}
     </div>
   );
 };

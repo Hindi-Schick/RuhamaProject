@@ -53,4 +53,20 @@ router.get('/api/reader/:id', async (req, res) => {
   }
 });
 
+router.delete('/api/reader/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reader = await ReaderRepository.deleteReader(parseInt(id)) as Reader | undefined | null;
+
+    if (!reader) {
+      return res.status(404).json({ error: 'Reader not found' });
+    }
+
+    return res.json({ message: 'Reader deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 export { router as readerRouter };

@@ -17,4 +17,7 @@ export class Reader extends BaseEntity {
 
   @Column()
   address: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  deleted_at: Date | null;
 }
