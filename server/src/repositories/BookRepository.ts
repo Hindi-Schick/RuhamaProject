@@ -3,18 +3,17 @@ import { Book } from '../entities/Book';
 import { BorrowingRepository } from './BorrowingRepository';
 
 class BookRepository {
-  static async createBook({ title, author, publisher_id, published_date, price }: any): Promise<Book> {
+  static async createBook({ title, author, price, published_date }: any): Promise<Book> {
     const book = Book.create({
       title,
       author,
-      publisher_id,
-      published_date,
       price,
+      published_date,
     });
 
     await book.save();
     return book;
-  }
+}
 
   static async deleteBook(bookId: number): Promise<void> {
     const book = await Book.findOne({ where: { book_id: bookId } });
