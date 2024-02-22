@@ -17,6 +17,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import { Link } from 'react-router-dom';
 
 type Book = {
   book_id: number;
@@ -212,6 +213,24 @@ const BookList: React.FC = () => {
         This is an outlined error Alert.
       </Alert>
       )}
+      <Button
+        component={Link}
+        to="/publisher"
+        variant="contained"
+        color="primary"
+        style={{ margin: '16px' }}
+      >
+      Add Publisher
+      </Button>
+      <Button
+        component={Link}
+        to="/addBook"
+        variant="contained"
+        color="primary"
+        style={{ margin: '16px' }}
+      >
+        Add New Book
+      </Button>
     </div>
   );
 };

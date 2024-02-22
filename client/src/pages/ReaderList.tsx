@@ -139,6 +139,15 @@ const ReaderList: React.FC = () => {
       >
         Add New Reader
       </Button>
+      <Button
+        component={Link}
+        to="/overdueReaders"
+        variant="contained"
+        color="primary"
+        style={{ margin: '16px' }}
+      >
+        Overdue Readers
+      </Button>
     </div>
   );
 };

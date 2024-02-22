@@ -41,8 +41,8 @@ const Navbar: React.FC = () => {
           <Button color="inherit" component={Link} to="/topTen" sx={{ display: { xs: 'none', md: 'block' } }}>
             Top 10
           </Button>
-          <Button color="inherit" component={Link} to="/overdueReaders" sx={{ display: { xs: 'none', md: 'block' } }}>
-            Overdue Readers
+          <Button color="inherit" component={Link} to="/publisherList" sx={{ display: { xs: 'none', md: 'block' } }}>
+           Publisher
           </Button>
         </Toolbar>
       </AppBar>
@@ -60,8 +60,8 @@ const Navbar: React.FC = () => {
           <ListItemButton component={Link} to="/topTen" onClick={() => toggleDrawer(false)}>
             Top 10
           </ListItemButton>
-          <ListItemButton component={Link} to="/overdueReaders" onClick={() => toggleDrawer(false)}>
-            Overdue Readers
+          <ListItemButton component={Link} to="/publisherList" onClick={() => toggleDrawer(false)}>
+          Publisher
           </ListItemButton>
         </List>
       </Drawer>

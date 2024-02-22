@@ -26,4 +26,21 @@ router.get('/api/publishers', async (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+router.delete('/api/publisher/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const publisher = await PublisherRepository.deletePublisher(parseInt(id)) as Publisher | undefined | null;
+
+    if (!publisher) {
+      return res.status(404).json({ error: 'Publisher not found' });
+    }
+
+    return res.json({ message: 'Publisher deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 export { router as publisherRouter };

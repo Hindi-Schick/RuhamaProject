@@ -11,5 +11,8 @@ export class Publisher extends BaseEntity {
 
   @Column()
   location: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  deleted_at: Date | null;
 }
 

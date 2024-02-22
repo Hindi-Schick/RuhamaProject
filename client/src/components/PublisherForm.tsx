@@ -17,7 +17,7 @@ const PublisherForm: React.FC = () => {
     try {
       const response = await axios.post('http://localhost:8080/api/publisher', data);
       console.log('Server Response:', response.data);
-      navigate('/bookList');
+      navigate('/publisherList');
     } catch (error) {
       console.error('Error:', error);
     }
