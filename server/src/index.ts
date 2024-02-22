@@ -6,6 +6,7 @@ import { copyOfBookRouter } from './routes/CopyOfBookRoutes';
 import { publisherRouter } from './routes/PublisherRoutes';
 import { readerRouter } from './routes/ReaderRoutes';
 import { AppDataSource } from '../dbConfig';
+import router from './routes/RouteConst';
 
 const app = express();
 
@@ -17,11 +18,8 @@ const main = async () => {
 
     app.use(cors());
     app.use(express.json());
-    app.use(bookRouter);
-    app.use(borrowingRouter);
-    app.use(copyOfBookRouter);
-    app.use(publisherRouter);
-    app.use(readerRouter);
+
+    app.use('/', router);
 
     const PORT = process.env.PORT || 8080;
     app.listen(PORT, () => {
