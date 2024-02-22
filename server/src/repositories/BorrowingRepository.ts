@@ -80,7 +80,7 @@ class BorrowingRepository {
     });
     const formattedBorrowings = borrowings.map(borrowing => ({
       borrowing_id: borrowing.borrowing_id,
-      book_title: borrowing.copy_book.title,
+      book_title: borrowing.copy_book.book.title,
       reader_name: borrowing.reader.name,
       copy_book_id: borrowing.copy_book,
       borrow_date: borrowing.borrow_date,

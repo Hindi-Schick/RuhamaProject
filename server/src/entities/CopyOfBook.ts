@@ -2,15 +2,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { Borrowing } from "./Borrowing";
 import { Book } from "./Book";
+import { IsBoolean } from "class-validator";
 
 @Entity("copy_of_book")
 export class CopyOfBook extends BaseEntity {
   @PrimaryGeneratedColumn()
   copy_book_id: number;
 
-  @Column()
-  title: string;
-
+  @IsBoolean()
   @Column()
   is_borrowed: boolean;
 

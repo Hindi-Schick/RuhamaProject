@@ -3,6 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinColu
 import { CopyOfBook } from "./CopyOfBook";
 import { Reader } from "./Reader";
 import { Book } from "./Book";
+import { IsDataURI, IsDate } from "class-validator";
 
 @Entity("borrowing")
 export class Borrowing extends BaseEntity {
@@ -15,6 +16,7 @@ export class Borrowing extends BaseEntity {
   @Column()
   reader_id: number;
 
+  @IsDate()
   @Column()
   borrow_date: Date;
 

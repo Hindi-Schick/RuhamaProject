@@ -1,4 +1,5 @@
 // entities/Publisher.ts
+import { IsString, MaxLength, MinLength } from "class-validator";
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
 @Entity("publisher")
@@ -6,9 +7,15 @@ export class Publisher extends BaseEntity {
   @PrimaryGeneratedColumn()
   publisher_id: number;
 
+  @IsString()
+  @MinLength(2)
+  @MaxLength(50)
   @Column()
   name: string;
 
+  @IsString()
+  @MinLength(2)
+  @MaxLength(100)
   @Column()
   location: string;
 
