@@ -1,6 +1,8 @@
 // src/repositories/PublisherRepository.ts
+import { CopyOfBook } from '../entities/CopyOfBook';
 import { Book } from '../entities/Book';
 import { Publisher } from '../entities/Publisher';
+import { Borrowing } from '../entities/Borrowing';
 
 class PublisherRepository {
     static async createPublisher({ name, location }: any): Promise<Publisher> {
@@ -29,6 +31,27 @@ class PublisherRepository {
         await publisher.save();
 
         return publisher;
+    }
+
+    static async generatePaymentReport(publisherId: number): Promise<{ publisher: Publisher, totalPayment: number }> {
+        const publisher = await Publisher.findOne({ where: { publisher_id: publisherId } });
+
+        if (!publisher) {
+            throw new Error('Publisher not found');
+        }
+
+        const copiesOfBooks = await CopyOfBook.createQueryBuilder('copy')
+            .leftJoinAndSelect('copy.book', 'book')
+            .leftJoinAndSelect('book.publisher', 'publisher')
+            .where('publisher.publisher_id = :publisherId', { publisherId })
+            .getMany();
+
+        let totalPayment = 0;
+        copiesOfBooks.forEach((copy) => {
+            totalPayment += copy.book.price;
+        });
+
+        return { publisher, totalPayment };
     }
 }
 

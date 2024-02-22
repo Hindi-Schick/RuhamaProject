@@ -43,4 +43,15 @@ router.delete('/api/publisher/:id', async (req, res) => {
   }
 });
 
+router.get('/api/publisher/payment-report/:publisherId', async (req, res) => {
+  try {
+      const { publisherId } = req.params;
+      const { publisher, totalPayment } = await PublisherRepository.generatePaymentReport(parseInt(publisherId));
+      return res.json({ publisher, totalPayment });
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 export { router as publisherRouter };

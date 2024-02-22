@@ -9,6 +9,7 @@ type Publisher = {
     name: string;
     location: string;
     deleted_at: Date | null;
+    totalPayment?: number;
 }
 
 const PublisherList: React.FC = () => {
@@ -20,11 +21,15 @@ const PublisherList: React.FC = () => {
     const fetchPublishers = async () => {
         try {
             const response = await axios.get('http://localhost:8080/api/publishers');
-            const filteredReaders = response.data.filter((publisher: Publisher) => !publisher.deleted_at);
-      setPublishers(filteredReaders);
-    } catch (error) {
-      console.error(error);
-    }
+            const filteredPublishers = response.data.filter((publisher: Publisher) => !publisher.deleted_at);
+            const publishersWithPayment = await Promise.all(filteredPublishers.map(async (publisher: Publisher) => {
+                const paymentResponse = await axios.get(`http://localhost:8080/api/publisher/payment-report/${publisher.publisher_id}`);
+                return { ...publisher, totalPayment: paymentResponse.data.totalPayment };
+            }));
+            setPublishers(publishersWithPayment);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     useEffect(() => {
@@ -67,6 +72,9 @@ const PublisherList: React.FC = () => {
                                 <Typography variant="body2" color="textSecondary">
                                     {publisher.location}
                                 </Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                    Total Payment: ₪{publisher.totalPayment}
+                                </Typography>
                                 <IconButton aria-label="delete" onClick={() => handleDeleteDialogOpen(publisher.publisher_id)} >
                                     <GridDeleteIcon />
                                 </IconButton>
@@ -76,33 +84,24 @@ const PublisherList: React.FC = () => {
                 ))}
             </Grid>
             <Dialog open={deleteDialogOpen} onClose={handleDeleteDialogClose}>
-        <DialogTitle>Delete Publisher</DialogTitle>
-        <DialogContent>
-          <Typography>Are you sure you want to delete this publisher?</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteDialogClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={() => handleDelete(publisherIdToDelete!)} color="primary">
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {deleteError && (
-        <Alert variant="outlined" severity="error">
-          Cannot delete publishers with books
-        </Alert>
-      )}
-            <Button
-                component={Link}
-                to="/publisher"
-                variant="contained"
-                color="primary"
-                style={{ margin: '16px' }}
-            >
-                Add Publisher
-            </Button>
+                <DialogTitle>Delete Publisher</DialogTitle>
+                <DialogContent>
+                    <Typography>Are you sure you want to delete this publisher?</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDeleteDialogClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={() => handleDelete(publisherIdToDelete!)} color="primary">
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            {deleteError && (
+                <Alert variant="outlined" severity="error">
+                    Cannot delete publishers with books
+                </Alert>
+            )}
             <Button
                 component={Link}
                 to="/publisher"
