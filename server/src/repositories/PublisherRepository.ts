@@ -22,7 +22,7 @@ class PublisherRepository {
             return null;
         }
 
-        const booksCount = await Book.count({ where: { publisher_id: publisherId } });
+        const booksCount = await Book.count({ where: { publisher } });
         if (booksCount > 0) {
             throw new Error("Cannot delete publisher with associated books");
         }
