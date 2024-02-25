@@ -10,25 +10,7 @@ import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-
-type Reader = {
-  reader_id: number;
-  name: string;
-  email: string;
-  phone: number;
-  address: string;
-  deleted_at: Date | null;
-  borrowedBooks: Borrowing[];
-}
-
-type Borrowing = {
-  borrowing_id: number;
-  copy_book_id: number;
-  reader_id: number;
-  book_id: number;
-  borrow_date: Date;
-  return_date: Date | null;
-}
+import { Reader } from '../utils/types';
 
 const ReaderList: React.FC = () => {
   const [readers, setReaders] = useState<Reader[]>([]);

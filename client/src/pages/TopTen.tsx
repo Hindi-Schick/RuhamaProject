@@ -1,12 +1,7 @@
 import * as React from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import axios from 'axios';
-
-interface Book {
-  id: number;
-  // numSales: number;
-  title: string;
-}
+import { Book } from '../utils/types';
 
 export default function TopTenPieChart() {
   const [topBooks, setTopBooks] = React.useState<Book[]>([]);
@@ -29,7 +24,7 @@ export default function TopTenPieChart() {
       series={[
         {
           data: topBooks.map((book, index) => ({
-            id: index,
+            book_id: index,
             value: index/index,
             label: book.title,
           })),

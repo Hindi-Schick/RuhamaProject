@@ -5,29 +5,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-
-type BorrowedBook = {
-    borrowing_id: number;
-    copy_book_id: number;
-    reader_id: number;
-    book_id: number;
-    borrow_date: Date;
-    return_date: Date | null;
-}
-
-type Reader = {
-    reader_id: number;
-    name: string;
-    email: string;
-    phone: number;
-    address: string;
-}
-
-type Book = {
-    book_id: number;
-    title: string;
-    // Add other properties if needed
-}
+import { Book, BorrowedBook, Reader } from '../utils/types';
 
 const BorrowedBooks: React.FC = () => {
     const { readerId } = useParams<{ readerId: string }>();
@@ -47,7 +25,6 @@ const BorrowedBooks: React.FC = () => {
                 setBorrowedBooks(borrowedBooksResponse.data);
                 setReader(readerResponse.data);
 
-                // Fetch details of all borrowed books
                 const booksIds = borrowedBooksResponse.data.map((borrowedBook: { book_id: any; }) => borrowedBook.book_id);
                 const booksResponse = await axios.get(`http://localhost:8080/api/books?ids=${booksIds.join(',')}`);
                 setBooks(booksResponse.data);

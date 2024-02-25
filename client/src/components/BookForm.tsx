@@ -2,22 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, Grid, Select, MenuItem, InputLabel, FormControl, SelectChangeEvent } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { BookFormData, Publisher } from '../utils/types';
 import axios from 'axios';
-
-// Define the type for form data
-type BookFormData = {
-  title: string;
-  author: string;
-  publisher_id: number | '';
-  published_date: string;
-  numCopies: number;
-  price: number;
-}
-
-type Publisher = {
-  publisher_id: number;
-  name: string;
-}
 
 const BookForm: React.FC = () => {
   const {

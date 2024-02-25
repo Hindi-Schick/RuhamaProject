@@ -18,20 +18,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import { Link } from 'react-router-dom';
-
-type Book = {
-  book_id: number;
-  title: string;
-  author: string;
-  publisher_id: number;
-  published_date: Date;
-  price: number;
-}
-
-type Publisher = {
-  publisher_id: number;
-  name: string;
-}
+import { Book, Publisher } from '../utils/types';
 
 const BookList: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);

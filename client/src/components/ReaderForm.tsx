@@ -3,13 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
-
-type ReaderFormData = {
-  name: string;
-  email: string;
-  phone: number;
-  address: string;
-}
+import { ReaderFormData } from '../utils/types';
 
 const ReaderForm: React.FC = () => {
   const { register, handleSubmit, formState } = useForm<ReaderFormData>();

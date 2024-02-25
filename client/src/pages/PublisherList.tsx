@@ -3,14 +3,7 @@ import { GridDeleteIcon } from '@mui/x-data-grid';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-
-type Publisher = {
-    publisher_id: number;
-    name: string;
-    location: string;
-    deleted_at: Date | null;
-    totalPayment?: number;
-}
+import { Publisher } from '../utils/types';
 
 const PublisherList: React.FC = () => {
     const [publishers, setPublishers] = useState<Publisher[]>([]);

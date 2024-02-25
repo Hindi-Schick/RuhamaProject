@@ -3,11 +3,7 @@ import { useForm } from 'react-hook-form';
 import { TextField, Button, Grid } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-type PublisherFormData = {
-  name: string;
-  location: string;
-}
+import { PublisherFormData } from '../utils/types';
 
 const PublisherForm: React.FC = () => {
   const { register, handleSubmit, formState } = useForm<PublisherFormData>();

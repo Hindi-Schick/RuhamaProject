@@ -3,26 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Button, Grid, Select, FormControl, SelectChangeEvent, InputLabel, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
-type BorrowingFormData = {
-  copy_book_id: number;
-  reader_id: number;
-  book_id: number;
-  borrow_date: Date;
-  return_date: Date;
-}
-
-type CopyOfBook = {
-  copy_book_id: number;
-  title: string;
-  book_id: number;
-  is_borrowed: boolean;
-}
-
-type Reader = {
-  reader_id: number;
-  name: string;
-}
+import { BorrowingFormData, CopyOfBook, Reader } from '../utils/types';
 
 const BorrowingForm: React.FC = () => {
   const navigate = useNavigate();
