@@ -18,11 +18,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import { Link } from 'react-router-dom';
-import { Book, Publisher } from '../utils/types';
+import { Book } from '../utils/types';
+import { fetchBooks } from '../api/book.api';
 
 const BookList: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
-  const [publishers, setPublishers] = useState<Record<number, string>>({});
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [open, setOpen] = useState(false);
@@ -36,31 +36,17 @@ const BookList: React.FC = () => {
     setPage(value);
   };
 
-  const fetchBooks = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/api/books');
-      setBooks(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const fetchPublishers = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/publishers');
-      const publisherMap: Record<number, string> = {};
-      response.data.forEach((publisher: Publisher) => {
-        publisherMap[publisher.publisher_id] = publisher.name;
-      });
-      setPublishers(publisherMap);
-    } catch (error) {
+      const fetchedBooks = await fetchBooks();
+      setBooks(fetchedBooks);
+        } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchBooks();
-    fetchPublishers();
+    fetchData();
   }, []);
 
   const handleOpen = (book: Book) => {
@@ -104,13 +90,13 @@ const BookList: React.FC = () => {
   const handleDelete = async (bookId: number) => {
     try {
       await axios.delete(`http://localhost:8080/api/book/${bookId}`);
-      fetchBooks();
-      handleDeleteDialogClose(); 
+      fetchData();
+      handleDeleteDialogClose();
       setDeleteError(false);
     } catch (error) {
       console.error(error);
       setDeleteError(true);
-      handleDeleteDialogClose(); 
+      handleDeleteDialogClose();
     } finally {
       setTimeout(() => setDeleteError(false), 3000);
     }
@@ -121,9 +107,11 @@ const BookList: React.FC = () => {
   const endIndex = startIndex + itemsPerPage;
 
   const filteredBooks = books.filter(book =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    book.author.toLowerCase().includes(searchTerm.toLowerCase())
+    (book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.author.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    !book.deleted_at
   );
+
 
   return (
     <div>
@@ -148,7 +136,7 @@ const BookList: React.FC = () => {
                   Published on {new Date(book.published_date).toLocaleDateString()}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  Publisher: {publishers[book.publisher_id]}
+                  Publisher: {book.publisher?.name}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
                   Price: {book.price}
@@ -197,8 +185,8 @@ const BookList: React.FC = () => {
       </Modal>
       {deleteError && (
         <Alert variant="outlined" severity="error">
-        This is an outlined error Alert.
-      </Alert>
+          This is an outlined error Alert.
+        </Alert>
       )}
       <Button
         component={Link}
@@ -207,7 +195,7 @@ const BookList: React.FC = () => {
         color="primary"
         style={{ margin: '16px' }}
       >
-      Add Publisher
+        Add Publisher
       </Button>
       <Button
         component={Link}
@@ -223,4 +211,3 @@ const BookList: React.FC = () => {
 };
 
 export default BookList;
-

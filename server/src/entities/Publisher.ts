@@ -1,6 +1,7 @@
 // entities/Publisher.ts
 import { IsString, MaxLength, MinLength } from "class-validator";
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
+import { Book } from "./Book";
 
 @Entity("publisher")
 export class Publisher extends BaseEntity {
@@ -21,5 +22,8 @@ export class Publisher extends BaseEntity {
 
   @Column({ type: 'timestamp', nullable: true })
   deleted_at: Date | null;
+
+  @OneToMany(() => Book, (book) => book.publisher)
+  books: Book[];
 }
 

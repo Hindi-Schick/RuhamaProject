@@ -38,9 +38,10 @@ export type Book = {
     book_id: number;
     title: string;
     author: string;
-    publisher_id: number;
+    publisher: Publisher;
     published_date: Date;
     price: number;
+    deleted_at: Date | null;
   }  
 
 export type BorrowingFormData = {
@@ -54,8 +55,8 @@ export type BorrowingFormData = {
   export type CopyOfBook = {
     copy_book_id: number;
     title: string;
-    book_id: number;
-    is_borrowed: boolean;
+    book: Book;
+    is_borrowed: boolean; 
   }
 
   export type PublisherFormData = {

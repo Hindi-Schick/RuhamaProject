@@ -21,6 +21,7 @@ const BorrowingForm: React.FC = () => {
 
   const [copyBooks, setCopyBooks] = useState<CopyOfBook[]>([]);
   const [readers, setReaders] = useState<Reader[]>([]);
+  const [selectedTitles, setSelectedTitles] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const fetchCopyBooks = async () => {
@@ -29,12 +30,12 @@ const BorrowingForm: React.FC = () => {
           'http://localhost:8080/api/copyBooks'
         );
         setCopyBooks(copyBooksResponse.data);
+        console.log(copyBooks);
 
         const readersResponse = await axios.get<Reader[]>('http://localhost:8080/api/readers');
         setReaders(readersResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
-
       }
     };
 
@@ -51,33 +52,48 @@ const BorrowingForm: React.FC = () => {
         <Grid item xs={12}>
           <FormControl fullWidth>
             <InputLabel>Choose a Book</InputLabel>
-            <Select
-              {...register('copy_book_id', { required: true })}
-              onChange={handleSelectChange}
-            >
-              {copyBooks
-                .filter((copyOfBook) => !copyOfBook.is_borrowed) 
-                .map((copyOfBook) => (
-                  <MenuItem key={copyOfBook.copy_book_id} value={copyOfBook.copy_book_id}>
-                    {copyOfBook.title}
-                  </MenuItem>
-                ))}
-            </Select>
+            {copyBooks.length > 0 && (
+              <Select
+                {...register('copy_book_id', { required: true })}
+                onChange={(e: any) => {
+                  handleSelectChange(e, 'copy_book_id');
+
+                  const selectedCopyBook = copyBooks.find(copyOfBook => copyOfBook.copy_book_id === e.target.value);
+                  console.log({ selectedCopyBook });
+
+                  if (selectedCopyBook) {
+                    setSelectedTitles(prevState => new Set(prevState.add(selectedCopyBook.title)));
+                  }
+                }}
+              >
+                {copyBooks
+                  .filter((copyOfBook) => {
+                    return !copyOfBook.is_borrowed && !selectedTitles.has(copyOfBook.title) && !copyOfBook.book.deleted_at;
+                  })
+                  .map((copyOfBook) => (
+                    <MenuItem key={copyOfBook.copy_book_id} value={copyOfBook.copy_book_id}>
+                      {copyOfBook.book.title}
+                    </MenuItem>
+                  ))}
+              </Select>
+            )}
           </FormControl>
         </Grid>
         <Grid item xs={12}>
           <FormControl fullWidth>
             <InputLabel>Choose a Reader</InputLabel>
-            <Select
-              {...register('reader_id', { required: true })}
-              onChange={(e: any) => handleSelectChange(e, 'reader_id')}
-            >
-              {readers.map((reader) => (
-                <MenuItem key={reader.reader_id} value={reader.reader_id}>
-                  {reader.name}
-                </MenuItem>
-              ))}
-            </Select>
+            {readers.length > 0 && (
+              <Select
+                {...register('reader_id', { required: true })}
+                onChange={(e: any) => handleSelectChange(e, 'reader_id')}
+              >
+                {readers.map((reader) => (
+                  <MenuItem key={reader.reader_id} value={reader.reader_id}>
+                    {reader.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
           </FormControl>
         </Grid>
         <Grid item xs={12}>

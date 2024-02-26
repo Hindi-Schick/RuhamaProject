@@ -4,7 +4,7 @@ import { BookRepository } from '../repositories/BookRepository';
 import { Book } from '../entities/Book';
 import { BorrowingRepository } from '../repositories/BorrowingRepository';
 import { FindOneOptions } from 'typeorm';
-
+import { validate } from '../utils/middleware';
 const router = express.Router();
 
 router.post('/api/book', async (req, res) => {
@@ -12,7 +12,7 @@ router.post('/api/book', async (req, res) => {
     const { title, author, publisher_id, published_date, price } = req.body;
     const book = await BookRepository.createBook({ title, author, publisher_id, published_date, price }); 
 
-    return res.json({ book_id: book.book_id });
+    return res.json({ book });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Internal Server Error' });
@@ -21,7 +21,7 @@ router.post('/api/book', async (req, res) => {
 
 router.get('/api/books', async (req, res) => {
   try {
-    const books = await Book.find(); 
+    const books = await Book.find({ relations: ['publisher'] });
     return res.json(books);
   } catch (error) {
     console.error(error);

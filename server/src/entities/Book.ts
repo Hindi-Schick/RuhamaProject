@@ -33,7 +33,8 @@ export class Book extends BaseEntity {
   @Column({ type: 'timestamp', nullable: true })
   deleted_at: Date;
 
-  @ManyToOne(() => Publisher, { cascade: true })
+  @ManyToOne(() => Publisher, (publisher) => publisher.books, 
+  { cascade: true })
   @JoinColumn({ name: "publisher_id" })
   publisher: Publisher;
 
