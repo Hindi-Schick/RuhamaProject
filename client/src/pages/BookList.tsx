@@ -39,8 +39,9 @@ const BookList: React.FC = () => {
   const fetchData = async () => {
     try {
       const fetchedBooks = await fetchBooks();
+      fetchedBooks.sort((a: { title: string; }, b: { title: any; }) => a.title.localeCompare(b.title));
       setBooks(fetchedBooks);
-        } catch (error) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -68,7 +69,6 @@ const BookList: React.FC = () => {
   const addCopy = async () => {
     try {
       await axios.post(`http://localhost:8080/api/copyOfBook`, {
-        title: selectedBook?.title,
         is_borrowed: false,
         book_id: selectedBook?.book_id
       });
@@ -185,18 +185,9 @@ const BookList: React.FC = () => {
       </Modal>
       {deleteError && (
         <Alert variant="outlined" severity="error">
-          This is an outlined error Alert.
+          Cannot delete borrowed book
         </Alert>
       )}
-      <Button
-        component={Link}
-        to="/publisher"
-        variant="contained"
-        color="primary"
-        style={{ margin: '16px' }}
-      >
-        Add Publisher
-      </Button>
       <Button
         component={Link}
         to="/addBook"

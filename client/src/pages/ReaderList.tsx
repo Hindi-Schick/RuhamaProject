@@ -22,6 +22,7 @@ const ReaderList: React.FC = () => {
     try {
       const response = await axios.get('http://localhost:8080/api/readers');
       const filteredReaders = response.data.filter((reader: Reader) => !reader.deleted_at);
+      filteredReaders.sort((a: { name: string; }, b: { name: string; }) => a.name.localeCompare(b.name));
       setReaders(filteredReaders);
     } catch (error) {
       console.error(error);

@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.post('/api/copyOfBook', async (req, res) => {
   try {
-    const { title, is_borrowed, book_id } = req.body;
-    const copyOfBook = await CopyOfBookRepository.createCopyOfBook({ title, is_borrowed, book_id });
+    const { is_borrowed, book_id } = req.body;
+    const copyOfBook = await CopyOfBookRepository.createCopyOfBook({ is_borrowed, book_id });
 
     return res.json(copyOfBook);
   } catch (error) {
@@ -19,7 +19,7 @@ router.post('/api/copyOfBook', async (req, res) => {
 
 router.get('/api/copyBooks', async (req, res) => {
   try {
-    const copyBooks = await CopyOfBook.find(); 
+    const copyBooks = await CopyOfBook.find({ relations: ['book']}); 
     return res.json(copyBooks);
   } catch (error) {
     console.error(error);

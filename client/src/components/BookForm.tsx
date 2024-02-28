@@ -60,13 +60,12 @@ const BookForm: React.FC = () => {
   
       console.log('Server Response (Book):', response.data);
 
-      const bookId = response.data.book_id;
+      const bookId = response.data.book.book_id;
       console.log(bookId);
       
       for (let i = 1; i <= numCopies; i++) {
         // Customize the copy data as needed
         const copyData = {
-          title: bookData.title,
           book_id: bookId, 
           is_borrowed: false, 
         };
