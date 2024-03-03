@@ -32,8 +32,10 @@ class BorrowingRepository {
 
   static async isBookBorrowed(bookId: number): Promise<boolean> {
     const copyOfBook = await CopyOfBook.findOne({ where: { copy_book_id: bookId } });
-
-    return copyOfBook ? copyOfBook.is_borrowed : false;
+    if (!copyOfBook) {
+      throw new Error('Failed to find copy of the book');
+    }
+    return copyOfBook?.is_borrowed;
   }
 
   static async returnBook(borrow_id: number): Promise<Borrowing | undefined> {
@@ -46,16 +48,12 @@ class BorrowingRepository {
       throw new Error('Failed to find corresponding borrowing record');
     }
 
-    if (!borrowing.copy_book) {
-      throw new Error('Failed to find corresponding copy of the book');
-    }
-
-    const isBookBorrowed = borrowing.copy_book.is_borrowed; 
+    const isBookBorrowed = await BorrowingRepository.isBookBorrowed(borrowing.copy_book.copy_book_id);
     console.log(isBookBorrowed);
 
-  if (!isBookBorrowed) {
-    throw new Error('The book has not yet been borrowed');
-  }else {
+    if (!isBookBorrowed) {
+      throw new Error('The book has not yet been borrowed');
+    } else {
       CopyOfBookRepository.markBookAsReturned(borrowing.copy_book.copy_book_id);
 
       borrowing.return_date = new Date();
