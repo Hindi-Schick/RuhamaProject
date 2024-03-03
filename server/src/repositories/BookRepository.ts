@@ -1,5 +1,4 @@
 // src/repositories/BookRepository.ts
-import { Publisher } from '../entities/Publisher';
 import { Book } from '../entities/Book';
 import { BorrowingRepository } from './BorrowingRepository';
 
