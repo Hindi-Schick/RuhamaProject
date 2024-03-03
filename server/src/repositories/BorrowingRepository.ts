@@ -1,33 +1,29 @@
 // src/repositories/BorrowingRepository.ts
 import { CopyOfBook } from '../entities/CopyOfBook';
 import { Borrowing } from '../entities/Borrowing';
-import CopyOfBookRepository from './CopyOfBookRepository';
+import { CopyOfBookRepository } from './CopyOfBookRepository';
 import { Book } from '../entities/Book';
 
 class BorrowingRepository {
   static async createBorrowing({ copy_book_id, reader_id }: { copy_book_id: number; reader_id: number }): Promise<Borrowing> {
-    try {
-      const copyOfBook = await CopyOfBook.findOneOrFail({ where: { copy_book_id }, relations: ['book'] });
-      if (copyOfBook.is_borrowed) {
-        throw new Error('CopyOfBook is already borrowed');
-      }
-
-      copyOfBook.is_borrowed = true;
-
-      const borrowing = Borrowing.create({
-        borrow_date: new Date(),
-        return_date: null,
-        copy_book: { copy_book_id },
-        reader: { reader_id },
-        book: copyOfBook.book
-      });
-
-      await Promise.all([copyOfBook.save(), borrowing.save()]);
-
-      return borrowing;
-    } catch (error) {
-      throw new Error('Error creating borrowing: ' + error.message);
+    const copyOfBook = await CopyOfBook.findOneOrFail({ where: { copy_book_id }, relations: ['book'] });
+    if (copyOfBook.is_borrowed) {
+      throw new Error('CopyOfBook is already borrowed');
     }
+
+    copyOfBook.is_borrowed = true;
+
+    const borrowing = Borrowing.create({
+      borrow_date: new Date(),
+      return_date: null,
+      copy_book: { copy_book_id },
+      reader: { reader_id },
+      book: copyOfBook.book
+    });
+
+    await Promise.all([copyOfBook.save(), borrowing.save()]);
+
+    return borrowing;
   }
 
   static async isBookBorrowed(bookId: number): Promise<boolean> {
@@ -85,40 +81,9 @@ class BorrowingRepository {
     return formattedBorrowings;
   }
 
-  static async getTopBorrowedBooks(): Promise<Book[]> {
-    const borrowings = await Borrowing.find({
-      relations: ['book'], // Ensure the book relation is properly populated
-    });
-
-    const bookBorrowCounts: { [key: number]: number } = {}; // Specify the type of the object
-
-    borrowings.forEach(borrowing => {
-      console.log(borrowing);
-      if (borrowing.book) { // Check if the book exists
-        const bookId = borrowing.book.book_id as number; // Specify the type as number        
-
-        if (bookBorrowCounts[bookId]) {
-          bookBorrowCounts[bookId]++;
-        } else {
-          bookBorrowCounts[bookId] = 1;
-        }
-      }
-    });
-
-    const sortedBookBorrowCounts = Object.entries(bookBorrowCounts).sort((a, b) => b[1] - a[1]);
-
-    const topBooksIds = sortedBookBorrowCounts.slice(0, 10).map(entry => parseInt(entry[0]));
-
-    const topBooksPromises = topBooksIds.map(async bookId => {
-      const book = await Book.findOne({ where: { book_id: bookId } }); // Use proper options
-      return book || null;
-    });
-
-    const topBooks = await Promise.all(topBooksPromises);
-
-    return topBooks.filter(book => book !== null) as Book[]; // Filter out null values
+  static async getBorrowingsWithBookRelations(): Promise<Borrowing[]> {
+    return Borrowing.find({ relations: ['book'] });
   }
-
 }
 
 export { BorrowingRepository };

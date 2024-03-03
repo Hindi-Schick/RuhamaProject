@@ -1,14 +1,14 @@
 // src/routes/BorrowingRoutes.ts
 
 import express from 'express';
-import { BorrowingRepository } from '../repositories/BorrowingRepository';
+import { BorrowingService } from '../services/BorrowingService';
 
 const router = express.Router();
 
 router.post('/api/borrowing', async (req, res) => {
   try {
     const { copy_book_id, reader_id } = req.body;
-    const borrowing = await BorrowingRepository.createBorrowing({ copy_book_id, reader_id });
+    const borrowing = await BorrowingService.createBorrowing({ copy_book_id, reader_id });
 
     return res.json(borrowing);
   } catch (error) {
@@ -19,7 +19,7 @@ router.post('/api/borrowing', async (req, res) => {
 
 router.get('/api/borrowings', async (req, res) => {
   try {
-    const borrowings = await BorrowingRepository.getAllBorrowingsWithDetails();
+    const borrowings = await BorrowingService.getAllBorrowingsWithDetails();
     return res.json(borrowings);
   } catch (error) {
     console.error(error);
@@ -30,7 +30,7 @@ router.get('/api/borrowings', async (req, res) => {
 router.patch('/api/returnBook', async (req, res) => {
   try {
     const { borrow_id } = req.body;
-    const returnedBook = await BorrowingRepository.returnBook(borrow_id);
+    const returnedBook = await BorrowingService.returnBook(borrow_id);
 
     return res.json(returnedBook);
   } catch (error) {
@@ -42,7 +42,7 @@ router.patch('/api/returnBook', async (req, res) => {
 router.get('/api/reader/:readerId/borrowedBooks', async (req, res) => {
   try {
     const { readerId } = req.params;
-    const borrowedBooks = await BorrowingRepository.getBorrowedBooksByReaderId({ readerId });
+    const borrowedBooks = await BorrowingService.getBorrowedBooksByReaderId({ readerId });
     return res.json(borrowedBooks);
   } catch (error) {
     console.error(error);

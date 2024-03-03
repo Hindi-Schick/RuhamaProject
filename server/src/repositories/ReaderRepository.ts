@@ -54,4 +54,4 @@ class ReaderRepository {
   }
 }
 
-export default ReaderRepository;
+export { ReaderRepository };

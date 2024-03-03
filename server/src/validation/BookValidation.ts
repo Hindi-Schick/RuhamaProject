@@ -8,4 +8,3 @@ export const bookSchema = yup.object().shape({
   price: yup.number().required(),
 });
 
-export default bookSchema;

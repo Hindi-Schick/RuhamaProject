@@ -1,6 +1,6 @@
 // src/routes/ReaderRoutes.ts
 import express from 'express';
-import ReaderRepository from '../repositories/ReaderRepository';
+import { ReaderRepository } from '../repositories/ReaderRepository';
 import { Reader } from '../entities/Reader';
 
 const router = express.Router();
@@ -41,7 +41,7 @@ router.get('/api/reader/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const reader = await Reader.findOne({ where: { reader_id: parseInt(id) } });
-    
+
     if (!reader) {
       return res.status(404).json({ error: 'Reader not found' });
     }

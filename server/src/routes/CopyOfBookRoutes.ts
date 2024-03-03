@@ -1,6 +1,6 @@
 // src/routes/CopyOfBookRoutes.ts
 import express from 'express';
-import CopyOfBookRepository from '../repositories/CopyOfBookRepository';
+import { CopyOfBookRepository } from '../repositories/CopyOfBookRepository';
 import { CopyOfBook } from '../entities/CopyOfBook';
 
 const router = express.Router();
@@ -19,7 +19,7 @@ router.post('/api/copyOfBook', async (req, res) => {
 
 router.get('/api/copyBooks', async (req, res) => {
   try {
-    const copyBooks = await CopyOfBook.find({ relations: ['book']}); 
+    const copyBooks = await CopyOfBook.find({ relations: ['book'] });
     return res.json(copyBooks);
   } catch (error) {
     console.error(error);

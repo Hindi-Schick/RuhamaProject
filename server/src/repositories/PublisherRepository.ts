@@ -2,7 +2,6 @@
 import { CopyOfBook } from '../entities/CopyOfBook';
 import { Book } from '../entities/Book';
 import { Publisher } from '../entities/Publisher';
-import { Borrowing } from '../entities/Borrowing';
 
 class PublisherRepository {
     static async createPublisher({ name, location }: any): Promise<Publisher> {
