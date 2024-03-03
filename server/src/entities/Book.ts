@@ -4,7 +4,7 @@ import { CopyOfBook } from "./CopyOfBook";
 import { Borrowing } from "./Borrowing";
 import { IsNumber, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
 
-@Entity("book")
+@Entity()
 export class Book extends BaseEntity {
   @PrimaryGeneratedColumn()
   book_id: number;

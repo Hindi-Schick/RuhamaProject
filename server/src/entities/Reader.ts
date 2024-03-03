@@ -2,7 +2,7 @@
 import { IsEmail, IsPhoneNumber, IsString, MaxLength, MinLength } from "class-validator";
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
-@Entity("reader")
+@Entity()
 export class Reader extends BaseEntity {
   @PrimaryGeneratedColumn()
   reader_id: number;

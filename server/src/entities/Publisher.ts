@@ -3,7 +3,7 @@ import { IsString, MaxLength, MinLength } from "class-validator";
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToMany } from "typeorm";
 import { Book } from "./Book";
 
-@Entity("publisher")
+@Entity()
 export class Publisher extends BaseEntity {
   @PrimaryGeneratedColumn()
   publisher_id: number;

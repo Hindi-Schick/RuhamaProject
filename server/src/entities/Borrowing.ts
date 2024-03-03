@@ -5,16 +5,10 @@ import { Reader } from "./Reader";
 import { Book } from "./Book";
 import { IsDataURI, IsDate } from "class-validator";
 
-@Entity("borrowing")
+@Entity()
 export class Borrowing extends BaseEntity {
   @PrimaryGeneratedColumn()
   borrowing_id: number;
-
-  @Column()
-  copy_book_id: number;
-
-  @Column()
-  reader_id: number;
 
   @IsDate()
   @Column()

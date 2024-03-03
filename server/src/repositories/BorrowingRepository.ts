@@ -13,17 +13,17 @@ class BorrowingRepository {
       }
 
       copyOfBook.is_borrowed = true;
-      await copyOfBook.save();
 
       const borrowing = Borrowing.create({
-        copy_book_id,
-        reader_id,
         borrow_date: new Date(),
-        return_date: undefined,
+        return_date: null,
+        copy_book: { copy_book_id },
+        reader: { reader_id },
         book: copyOfBook.book
       });
 
-      await borrowing.save();
+      await Promise.all([copyOfBook.save(), borrowing.save()]);
+
       return borrowing;
     } catch (error) {
       throw new Error('Error creating borrowing: ' + error.message);
@@ -31,34 +31,32 @@ class BorrowingRepository {
   }
 
   static async isBookBorrowed(bookId: number): Promise<boolean> {
-    const copyOfBook = await CopyOfBook.findOne({ where: { book: { book_id: bookId } } });
+    const copyOfBook = await CopyOfBook.findOne({ where: { copy_book_id: bookId } });
+
     return copyOfBook ? copyOfBook.is_borrowed : false;
   }
 
   static async returnBook(borrow_id: number): Promise<Borrowing | undefined> {
     const borrowing = await Borrowing.findOne({
       where: { borrowing_id: borrow_id },
+      relations: ['copy_book'],
     });
 
     if (!borrowing) {
       throw new Error('Failed to find corresponding borrowing record');
     }
 
-    const copy_book_id = borrowing.copy_book_id;
-    const copyOfBook = await CopyOfBook.findOne({
-      where: { copy_book_id },
-    });
-
-    if (!copyOfBook) {
-      throw new Error('Failed to mark CopyOfBook as returned');
+    if (!borrowing.copy_book) {
+      throw new Error('Failed to find corresponding copy of the book');
     }
 
-    if (!copyOfBook.is_borrowed) {
-      console.log(copyOfBook.is_borrowed);
-      console.log(borrowing.borrowing_id);
-      throw new Error('The book has not yet been borrowed');
-    } else {
-      CopyOfBookRepository.markBookAsReturned(copyOfBook.copy_book_id);
+    const isBookBorrowed = borrowing.copy_book.is_borrowed; 
+    console.log(isBookBorrowed);
+
+  if (!isBookBorrowed) {
+    throw new Error('The book has not yet been borrowed');
+  }else {
+      CopyOfBookRepository.markBookAsReturned(borrowing.copy_book.copy_book_id);
 
       borrowing.return_date = new Date();
       await borrowing.save();
@@ -68,7 +66,7 @@ class BorrowingRepository {
 
   static async getBorrowedBooksByReaderId({ readerId }: { readerId: string; }): Promise<Borrowing[]> {
     const borrowedBooks = await Borrowing.find({
-      where: { reader_id: parseInt(readerId) },
+      where: { reader: { reader_id: parseInt(readerId) } },
     });
 
     return borrowedBooks;

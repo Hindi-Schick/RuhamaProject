@@ -4,7 +4,7 @@ import { Borrowing } from "./Borrowing";
 import { Book } from "./Book";
 import { IsBoolean } from "class-validator";
 
-@Entity("copy_of_book")
+@Entity()
 export class CopyOfBook extends BaseEntity {
   @PrimaryGeneratedColumn()
   copy_book_id: number;
