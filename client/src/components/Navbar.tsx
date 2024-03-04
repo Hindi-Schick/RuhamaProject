@@ -12,7 +12,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div>
+    <>
       <AppBar position="fixed" style={{ width: '100%' }}>
         <Toolbar>
           <IconButton
@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
           </ListItemButton>
         </List>
       </Drawer>
-    </div>
+    </>
   );
 };
 

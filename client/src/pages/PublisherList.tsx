@@ -1,9 +1,9 @@
-import { Alert, Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Typography } from '@mui/material';
-import { GridDeleteIcon } from '@mui/x-data-grid';
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from '@mui/material';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Publisher } from '../utils/types';
+import GenericCard from '../components/GenericCard';
+import { Book, Publisher } from '../utils/types';
 
 const PublisherList: React.FC = () => {
     const [publishers, setPublishers] = useState<Publisher[]>([]);
@@ -54,25 +54,14 @@ const PublisherList: React.FC = () => {
         }
     };
     return (
-        <div>
-            <h2>Publisher List</h2>
+        <>
+            <Typography variant="h4">Publisher List</Typography>
             <Grid container spacing={2}>
                 {publishers.map((publisher) => (
                     <Grid key={publisher.publisher_id} item xs={12} sm={6} md={4}>
-                        <Card sx={{ minWidth: 200, marginBottom: '16px', backgroundColor: '#f0f0f0' }}>
-                            <CardContent>
-                                <Typography variant="h6">{publisher.name}</Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                    {publisher.location}
-                                </Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                    Total Payment: ₪{publisher.totalPayment}
-                                </Typography>
-                                <IconButton aria-label="delete" onClick={() => handleDeleteDialogOpen(publisher.publisher_id)} >
-                                    <GridDeleteIcon />
-                                </IconButton>
-                            </CardContent>
-                        </Card>
+                        <GenericCard data={publisher} handleDeleteDialogOpen={handleDeleteDialogOpen} type={"publisher"} handleOpen={function (data: Book): void {
+                            throw new Error('Function not implemented.');
+                        } } />
                     </Grid>
                 ))}
             </Grid>
@@ -104,7 +93,7 @@ const PublisherList: React.FC = () => {
             >
                 Add Publisher
             </Button>
-        </div>
+        </>
     )
 }
 

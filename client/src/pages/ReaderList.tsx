@@ -1,16 +1,12 @@
+import { Alert, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import CardActions from '@mui/material/CardActions';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Alert, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import { Reader } from '../utils/types';
+import GenericCard from '../components/GenericCard';
+import { Book, Reader } from '../utils/types';
 
 const ReaderList: React.FC = () => {
   const [readers, setReaders] = useState<Reader[]>([]);
@@ -60,37 +56,14 @@ const ReaderList: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Reader List</h2>
+    <>
+      <Typography variant="h4">Reader List</Typography>
       <Grid container spacing={2}>
         {readers.map((reader) => (
           <Grid key={reader.reader_id} item xs={12} sm={6} md={3}>
-            <Card sx={{ minWidth: 275 }}>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  {reader.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {reader.email}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Phone: {reader.phone}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Address: {reader.address}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small" component={Link} to={`/reader/${reader.reader_id}/borrowedBooks`}>
-                  View Borrowed Books
-                </Button>
-                {!reader.deleted_at && (
-                  <IconButton aria-label="delete" onClick={() => handleDeleteDialogOpen(reader.reader_id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                )}
-              </CardActions>
-            </Card>
+            <GenericCard data={reader} handleDeleteDialogOpen={handleDeleteDialogOpen} type={"reader"} handleOpen={function (data: Book): void {
+              throw new Error('Function not implemented.');
+            } } />
           </Grid>
         ))}
       </Grid>
@@ -131,7 +104,7 @@ const ReaderList: React.FC = () => {
       >
         Overdue Readers
       </Button>
-    </div>
+    </>
   );
 };
 

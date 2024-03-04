@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import { CardActions } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import GenericCard from './GenericCard';
+import { Book } from '../utils/types';
 
 const OverdueReaderList: React.FC = () => {
   const [overdueReaders, setOverdueReaders] = useState<any[]>([]);
@@ -25,36 +22,20 @@ const OverdueReaderList: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Overdue Readers List</h2>
+    <>
+      <Typography variant="h4">Overdue Readers List</Typography>
       <Grid container spacing={16}>
-                {overdueReaders.map((reader) => (
-                    <Grid key={reader.reader_id} item xs={12} sm={6} md={3}>
-                    <Card sx={{ minWidth: 275 }}>
-                      <CardContent>
-                        <Typography variant="h5" component="div">
-                          {reader.name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {reader.email}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Phone: {reader.phone}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Address: {reader.address}
-                        </Typography>
-                      </CardContent>
-                      <CardActions>
-                        <Button size="small" component={Link} to={`/reader/${reader.reader_id}/borrowedBooks`}>
-                          View Borrowed Books
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))}
-            </Grid>
-    </div>
+        {overdueReaders.map((reader) => (
+          <Grid key={reader.reader_id} item xs={12} sm={6} md={3}>
+            <GenericCard data={reader} type={"overduReader"} handleDeleteDialogOpen={function (id: number): void {
+              throw new Error('Function not implemented.');
+            } } handleOpen={function (data: Book): void {
+              throw new Error('Function not implemented.');
+            } } />
+          </Grid>
+        ))}
+      </Grid>
+    </>
   );
 };
 

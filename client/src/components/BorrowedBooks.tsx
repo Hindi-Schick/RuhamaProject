@@ -37,8 +37,8 @@ const BorrowedBooks: React.FC = () => {
     }, [readerId]);
 
     return (
-        <div>
-            <h2>Borrowed Books by {reader?.name}</h2>
+        <>
+            <Typography variant="h4">Borrowed Books by {reader?.name}</Typography>
             <Grid container spacing={2} style={{ margin: '10px' }}>
                 {Array.isArray(borrowedBooks) && borrowedBooks
                     .filter(borrowedBook => !borrowedBook.return_date)
@@ -61,7 +61,7 @@ const BorrowedBooks: React.FC = () => {
                     ))}
             </Grid>
 
-        </div>
+        </>
     );
 };
 

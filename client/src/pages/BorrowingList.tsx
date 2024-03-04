@@ -59,7 +59,7 @@ export default function BorrowingTable() {
     };
 
     return (
-        <div>
+        <>
             <Grid container spacing={2}>
                 <Grid item>
                     <Box id="filter-panel" />
@@ -112,6 +112,6 @@ export default function BorrowingTable() {
                 Return Book
             </Button>
 
-        </div>
+        </>
     );
 };

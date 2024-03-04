@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
+import { Alert } from '@mui/material';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import Modal from '@mui/material/Modal';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import { Alert, IconButton } from '@mui/material';
-import { PlusOne } from '@mui/icons-material';
-import { GridDeleteIcon } from '@mui/x-data-grid';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
+import Typography from '@mui/material/Typography';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Book } from '../utils/types';
 import { fetchBooks } from '../api/book.api';
+import GenericCard from '../components/GenericCard';
+import { Book } from '../utils/types';
 
 const BookList: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -114,8 +111,8 @@ const BookList: React.FC = () => {
 
 
   return (
-    <div>
-      <h2>Book List</h2>
+    <>
+      <Typography variant="h4">Book List</Typography>
       <TextField
         label="Search Book"
         variant="outlined"
@@ -126,29 +123,7 @@ const BookList: React.FC = () => {
       <Grid container spacing={2}>
         {filteredBooks.slice(startIndex, endIndex).map((book) => (
           <Grid key={book.book_id} item xs={12} sm={6} md={4}>
-            <Card sx={{ minWidth: 200, marginBottom: '16px', backgroundColor: '#f0f0f0' }}>
-              <CardContent>
-                <Typography variant="h6">{book.title}</Typography>
-                <Typography variant="body2" color="textSecondary">
-                  {book.author}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Published on {new Date(book.published_date).toLocaleDateString()}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Publisher: {book.publisher?.name}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Price: {book.price}
-                </Typography>
-                <IconButton onClick={() => handleOpen(book)} color="primary" aria-label="add copy">
-                  <PlusOne />
-                </IconButton>
-                <IconButton aria-label="delete" onClick={() => handleDeleteDialogOpen(book.book_id)} >
-                  <GridDeleteIcon />
-                </IconButton>
-              </CardContent>
-            </Card>
+            <GenericCard data={book} handleOpen={handleOpen} handleDeleteDialogOpen={handleDeleteDialogOpen} type={"book"} />
           </Grid>
         ))}
       </Grid>
@@ -197,7 +172,7 @@ const BookList: React.FC = () => {
       >
         Add New Book
       </Button>
-    </div>
+    </>
   );
 };
 
