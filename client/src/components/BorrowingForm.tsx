@@ -87,11 +87,14 @@ const BorrowingForm: React.FC = () => {
                 {...register('reader_id', { required: true })}
                 onChange={(e: any) => handleSelectChange(e, 'reader_id')}
               >
-                {readers.map((reader) => (
-                  <MenuItem key={reader.reader_id} value={reader.reader_id}>
-                    {reader.name}
-                  </MenuItem>
-                ))}
+                {readers
+                  .filter((reader) => {
+                    return !reader.deleted_at;
+                  }).map((reader) => (
+                    <MenuItem key={reader.reader_id} value={reader.reader_id}>
+                      {reader.name}
+                    </MenuItem>
+                  ))}
               </Select>
             )}
           </FormControl>

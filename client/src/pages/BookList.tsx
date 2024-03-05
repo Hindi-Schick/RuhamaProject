@@ -34,13 +34,9 @@ const BookList: React.FC = () => {
   };
 
   const fetchData = async () => {
-    try {
-      const fetchedBooks = await fetchBooks();
-      fetchedBooks.sort((a: { title: string; }, b: { title: any; }) => a.title.localeCompare(b.title));
-      setBooks(fetchedBooks);
-    } catch (error) {
-      console.error(error);
-    }
+    const fetchedBooks = await fetchBooks();
+    fetchedBooks.sort((a: { title: string; }, b: { title: any; }) => a.title.localeCompare(b.title));
+    setBooks(fetchedBooks);
   };
 
   useEffect(() => {

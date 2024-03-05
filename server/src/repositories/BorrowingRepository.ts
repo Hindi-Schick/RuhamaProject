@@ -2,7 +2,6 @@
 import { CopyOfBook } from '../entities/CopyOfBook';
 import { Borrowing } from '../entities/Borrowing';
 import { CopyOfBookRepository } from './CopyOfBookRepository';
-import { Book } from '../entities/Book';
 
 class BorrowingRepository {
   static async createBorrowing({ copy_book_id, reader_id }: { copy_book_id: number; reader_id: number }): Promise<Borrowing> {
