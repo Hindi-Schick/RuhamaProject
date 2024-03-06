@@ -1,12 +1,13 @@
-import { Alert, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Alert, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { GridDeleteIcon } from '@mui/x-data-grid';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import GenericCard from '../components/GenericCard';
-import { Book, Reader } from '../utils/types';
+import Card from '../components/Card';
+import { Reader } from '../utils/types';
 
 const ReaderList: React.FC = () => {
   const [readers, setReaders] = useState<Reader[]>([]);
@@ -61,9 +62,25 @@ const ReaderList: React.FC = () => {
       <Grid container spacing={2}>
         {readers.map((reader) => (
           <Grid key={reader.reader_id} item xs={12} sm={6} md={3}>
-            <GenericCard data={reader} handleDeleteDialogOpen={handleDeleteDialogOpen} type={"reader"} handleOpen={function (data: Book): void {
-              throw new Error('Function not implemented.');
-            } } />
+            <Card
+              title={reader.name}
+              details={[
+                'Phone: ' + reader.phone,
+                'Address: ' + reader.address,
+                 reader.email
+              ]}
+              actions={<>
+                <Button size="small" component={Link} to={`/reader/${reader.reader_id}/borrowedBooks`}>
+                View Borrowed Books
+              </Button>
+              {!reader.deleted_at && (
+                <IconButton aria-label="delete" onClick={() => handleDeleteDialogOpen(reader.reader_id)}>
+                  <GridDeleteIcon />
+                </IconButton>
+              )}
+              </>
+              }
+            />
           </Grid>
         ))}
       </Grid>

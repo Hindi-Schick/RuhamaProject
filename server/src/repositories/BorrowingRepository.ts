@@ -30,6 +30,7 @@ class BorrowingRepository {
     if (!copyOfBook) {
       throw new Error('Failed to find copy of the book');
     }
+    
     return copyOfBook?.is_borrowed;
   }
 

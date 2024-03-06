@@ -1,9 +1,10 @@
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from '@mui/material';
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import GenericCard from '../components/GenericCard';
-import { Book, Publisher } from '../utils/types';
+import { Publisher } from '../utils/types';
+import Card from '../components/Card';
+import { GridDeleteIcon } from '@mui/x-data-grid';
 
 const PublisherList: React.FC = () => {
     const [publishers, setPublishers] = useState<Publisher[]>([]);
@@ -59,9 +60,17 @@ const PublisherList: React.FC = () => {
             <Grid container spacing={2}>
                 {publishers.map((publisher) => (
                     <Grid key={publisher.publisher_id} item xs={12} sm={6} md={4}>
-                        <GenericCard data={publisher} handleDeleteDialogOpen={handleDeleteDialogOpen} type={"publisher"} handleOpen={function (data: Book): void {
-                            throw new Error('Function not implemented.');
-                        } } />
+                        <Card
+                            title={publisher.name}
+                            details={[
+                                publisher.location,
+                                'Total Payment: ' + publisher.totalPayment + '₪',
+                            ]}
+                            actions={<IconButton aria-label="delete" onClick={() => handleDeleteDialogOpen(publisher.publisher_id)} >
+                                <GridDeleteIcon />
+                            </IconButton>
+                            }
+                        />
                     </Grid>
                 ))}
             </Grid>

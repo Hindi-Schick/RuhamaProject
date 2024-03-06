@@ -1,3 +1,5 @@
+import { SxProps, Theme } from "@mui/material/styles";
+
 export type Publisher = {
   publisher_id: number;
   name: string;
@@ -80,12 +82,27 @@ export type Borrowing = {
   return_date: Date | null;
 }
 
-export type Props = {
-  data: Book | Reader | Publisher;
-  handleOpen: (data: Book) => void;
-  handleDeleteDialogOpen: (id: number) => void;
-  type: 'book' | 'reader' | 'overduReader' | 'publisher';
+export type GenericCardProps = {
+  title: string;
+  details: string[];
+  actions?: React.ReactNode;
+  cardStyle?: SxProps<Theme>;
 }
+
+export type BookAddingProps = {
+  open: boolean;
+  onClose: () => void;
+  selectedBook: Book | null;
+}
+
+export type BookDeletingProps = {
+  open: boolean;
+  onClose: () => void;
+  bookId: number | null;
+  fetchData: () => void;
+}
+
+
 
 
 

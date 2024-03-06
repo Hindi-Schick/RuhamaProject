@@ -36,8 +36,14 @@ router.get('/api/top10', async (req, res) => {
 
 router.delete('/api/book/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  await BookService.deleteBook(parseInt(bookId));
-  return res.json({ message: 'Book deleted successfully' });
+  try {
+    await BookService.deleteBook(parseInt(bookId));
+    return res.json({ message: 'Book deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'An error occurred while deleting the book' });
+  }
 });
+
 
 export { router as bookRouter };

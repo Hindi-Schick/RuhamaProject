@@ -23,6 +23,7 @@ class BookRepository {
     }
 
     const isBookBorrowed = await BorrowingRepository.isBookBorrowed(bookId);
+    
     if (isBookBorrowed) {
       throw new Error('Cannot delete borrowed book');
     }

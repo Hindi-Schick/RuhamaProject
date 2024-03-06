@@ -1,9 +1,10 @@
+import { Button } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import GenericCard from './GenericCard';
-import { Book } from '../utils/types';
+import { Link } from 'react-router-dom';
+import Card from './Card';
 
 const OverdueReaderList: React.FC = () => {
   const [overdueReaders, setOverdueReaders] = useState<any[]>([]);
@@ -27,11 +28,19 @@ const OverdueReaderList: React.FC = () => {
       <Grid container spacing={16}>
         {overdueReaders.map((reader) => (
           <Grid key={reader.reader_id} item xs={12} sm={6} md={3}>
-            <GenericCard data={reader} type={"overduReader"} handleDeleteDialogOpen={function (id: number): void {
-              throw new Error('Function not implemented.');
-            } } handleOpen={function (data: Book): void {
-              throw new Error('Function not implemented.');
-            } } />
+             <Card
+              title={reader.name}
+              details={[
+                'Phone: ' + reader.phone,
+                'Address: ' + reader.address,
+                 reader.email
+              ]}
+              actions={
+                <Button size="small" component={Link} to={`/reader/${reader.reader_id}/borrowedBooks`}>
+                View Borrowed Books
+              </Button>
+              }
+            />
           </Grid>
         ))}
       </Grid>
